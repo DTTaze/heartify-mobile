@@ -1,0 +1,1 @@
+export const LINK_TO_LOGO = "../../../assets/images/BuBu.png"
