@@ -33,7 +33,7 @@ export default function TabTwoScreen() {
         </ThemedText>
       </ThemedView>
       <View className="flex items-center justify-center rounded-full bg-neutral-black-50 p-4">
-        <Text className="text-h2 text-primary-100 ">Hello world</Text>
+        <Text className="font-bold text-h2 text-primary-100 ">Hella world</Text>
       </View>
       <ThemedText>
         This app includes example code to help you get started.
