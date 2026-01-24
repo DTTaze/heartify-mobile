@@ -3,7 +3,7 @@ import { View, Text } from 'react-native';
 export default function NutritionContent() {
   return (
     <View>
-      <Text className="mb-3 font-semibold text-xl text-primary-700">
+      <Text className="mb-3 text-xl font-semibold text-primary-700">
         Recommendations
       </Text>
 

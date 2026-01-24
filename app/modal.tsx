@@ -5,10 +5,10 @@ import { Text, View } from 'react-native';
 const modal = () => {
   return (
     <View>
-      <Text className="font-light text-white">Modal</Text>
-      <Text className="font-medium text-white">Modal</Text>
-      <Text className="font-bold text-white">Modal</Text>
-      <TextCustom className="text-white">Modal</TextCustom>
+      <Text className="font-logo text-h2 text-primary-700">Modal</Text>
+      <Text className="font-qu-medium text-black">Modal</Text>
+      <Text className="font-qu-bold text-black">Modal</Text>
+      <TextCustom className="text-black">Modal</TextCustom>
     </View>
   );
 };

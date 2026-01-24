@@ -12,7 +12,7 @@ export default function HealthyActionPlan() {
 
   return (
     <View className="flex-1 bg-white px-5 pt-10">
-      <Text className="mb-4 font-semibold text-2xl text-primary-800">
+      <Text className="mb-4 text-2xl font-semibold text-primary-800">
         Healthy action plan
       </Text>
 
@@ -73,7 +73,7 @@ export default function HealthyActionPlan() {
           />
         </View>
 
-        <Text className="mb-3 font-semibold text-xl text-primary-700">
+        <Text className="mb-3 text-xl font-semibold text-primary-700">
           Recommendations
         </Text>
 

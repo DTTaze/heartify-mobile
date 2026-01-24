@@ -6,6 +6,9 @@ type TextCustomProps = TextProps & {
 
 export function TextCustom({ className, ...props }: TextCustomProps) {
   return (
-    <Text className={`font-sans text-black ${className ?? ''}`} {...props} />
+    <Text
+      className={`font-qu-regular text-black ${className ?? ''}`}
+      {...props}
+    />
   );
 }
