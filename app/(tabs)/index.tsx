@@ -2,6 +2,7 @@ import { ScrollView, View } from 'react-native';
 
 import Header from '@/components/ui/Header';
 import HealthyActionPlan from './components/HealthyActionPlan';
+import QuickAccessSection from './components/QuickAccessSection';
 
 export default function HomeScreen() {
   return (
@@ -9,7 +10,10 @@ export default function HomeScreen() {
       <ScrollView showsVerticalScrollIndicator={false}>
         <Header />
 
-        <HealthyActionPlan />
+        <View className="flex gap-6 p-4">
+          <QuickAccessSection />
+          <HealthyActionPlan />
+        </View>
       </ScrollView>
     </View>
   );
