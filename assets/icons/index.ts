@@ -1,5 +1,9 @@
 export { default as Book } from './book-line.svg';
 export { default as Heart } from './heart-line.svg';
 export { default as Home } from './home-line.svg';
+export { default as Notification } from './noti-icon.svg';
 export { default as Camera } from './photo-camera.svg';
+export { default as Settings } from './settings-icon.svg';
 export { default as User } from './user-line.svg';
+export { default as BubuLogo } from '../images/bubu-logo.svg';
+export { default as BubuRecommend } from '../images/bubu-recommend.svg';
