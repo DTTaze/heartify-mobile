@@ -5,6 +5,7 @@ import CaloriesSection from './components/CaloriesSection';
 import HealthSummarySection from './components/HealthSummarySection';
 import HealthyActionPlan from './components/HealthyActionPlan';
 import QuickAccessSection from './components/QuickAccessSection';
+import StepSection from './components/StepSection';
 
 export default function HomeScreen() {
   return (
@@ -17,6 +18,7 @@ export default function HomeScreen() {
           <HealthSummarySection />
           <HealthyActionPlan />
           <CaloriesSection />
+          <StepSection />
         </View>
       </ScrollView>
     </View>
