@@ -13,7 +13,7 @@ export default function HealthyActionPlan() {
   const [activeSubTab, setActiveSubTab] = useState('Nutritions');
 
   return (
-    <View className="flex-1 bg-white px-5 pt-10">
+    <View className="flex-1 bg-white pt-10">
       <Text className="mb-4 font-qu-semibold text-2xl text-primary-800">
         Healthy action plan
       </Text>
