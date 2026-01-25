@@ -24,11 +24,11 @@ export default function UploadSection() {
   return (
     <Section title="">
       <View className="mb-5 py-2">
-        <Text className="text-center font-bold text-xl text-primary-700">
+        <Text className="text-center text-xl font-bold text-primary-700">
           Record Details
         </Text>
 
-        <Text className="mt-1 text-center font-semibold text-base text-gray-600">
+        <Text className="mt-1 text-center text-base font-semibold text-gray-600">
           Complete your health profile by filling in the details from your
           medical report.
         </Text>

@@ -1,4 +1,5 @@
-import { TouchableOpacity, Text } from 'react-native';
+import { TextCustom } from '@/components/ui/TextCustom';
+import { TouchableOpacity } from 'react-native';
 
 export default function SegmentTab({
   label,
@@ -17,9 +18,15 @@ export default function SegmentTab({
         active ? 'bg-primary-500' : 'bg-neutral-white-400'
       }`}
     >
-      <Text className={active ? 'font-semibold text-white' : 'text-gray-600'}>
+      <TextCustom
+        className={
+          active
+            ? 'font-qu-semibold text-white'
+            : 'font-qu-semibold text-neutral-black-500'
+        }
+      >
         {label}
-      </Text>
+      </TextCustom>
     </TouchableOpacity>
   );
 }

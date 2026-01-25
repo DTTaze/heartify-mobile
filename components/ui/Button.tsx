@@ -18,7 +18,7 @@ export default function Button({
       onPress={onPress}
       className={`items-center rounded-3xl bg-primary-600 py-4 ${className}`}
     >
-      <Text className={`font-semibold text-base text-white ${textClassName}`}>
+      <Text className={`text-base font-semibold text-white ${textClassName}`}>
         {title}
       </Text>
     </Pressable>

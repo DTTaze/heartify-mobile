@@ -11,7 +11,7 @@ export default function Section({
 }) {
   return (
     <View className="mb-6">
-      <Text className="font-semibold text-base text-gray-900">{title}</Text>
+      <Text className="text-base font-semibold text-gray-900">{title}</Text>
       {subtitle && (
         <Text className="mt-1 text-sm text-gray-500">{subtitle}</Text>
       )}

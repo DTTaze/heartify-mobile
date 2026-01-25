@@ -22,7 +22,7 @@ export default function BloodPressureSection() {
       />
 
       <View className="mt-4">
-        <Text className="mb-2 font-semibold text-sm text-neutral-black-500">
+        <Text className="mb-2 text-sm font-semibold text-neutral-black-500">
           Currently on blood pressure medication?
         </Text>
 

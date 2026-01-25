@@ -20,7 +20,7 @@ export function InputWithOptions<T extends string>({
 
   return (
     <View className="mb-5">
-      <TextCustom className="mb-1 font-semibold text-sm text-neutral-black-500">
+      <TextCustom className="mb-1 text-sm font-semibold text-neutral-black-500">
         {label}
       </TextCustom>
 

@@ -1,3 +1,4 @@
+import { cn } from '@/lib/utils';
 import { Text, TextProps } from 'react-native';
 
 type TextCustomProps = TextProps & {
@@ -6,6 +7,9 @@ type TextCustomProps = TextProps & {
 
 export function TextCustom({ className, ...props }: TextCustomProps) {
   return (
-    <Text className={`font-sans text-black ${className ?? ''}`} {...props} />
+    <Text
+      className={cn(`text-black, font-qu-regular ${className}`)}
+      {...props}
+    />
   );
 }

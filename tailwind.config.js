@@ -1,17 +1,17 @@
 /** @type {import('tailwindcss').Config} */
 
-const plugin = require('tailwindcss/plugin');
 module.exports = {
   content: ['./app/**/*.{js,jsx,ts,tsx}', './components/**/*.{js,jsx,ts,tsx}'],
   presets: [require('nativewind/preset')],
   theme: {
     extend: {
       fontFamily: {
-        light: ['Quicksand-Light'],
-        sans: ['Quicksand-Regular'],
-        medium: ['Quicksand-Medium'],
-        semibold: ['Quicksand-SemiBold'],
-        bold: ['Quicksand-Bold'],
+        'qu-light': ['Quicksand-Light'],
+        'qu-regular': ['Quicksand-Regular'],
+        'qu-medium': ['Quicksand-Medium'],
+        'qu-semibold': ['Quicksand-SemiBold'],
+        'qu-bold': ['Quicksand-Bold'],
+        logo: ['Baloo-Bold'],
       },
       colors: {
         primary: {
@@ -130,14 +130,5 @@ module.exports = {
       },
     },
   },
-  plugins: [
-    plugin(function ({ addUtilities }) {
-      addUtilities({
-        '.font-bold': {
-          fontFamily: 'Quicksand-Bold',
-          fontWeight: '600',
-        },
-      });
-    }),
-  ],
+  plugins: [],
 };
