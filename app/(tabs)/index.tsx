@@ -1,9 +1,10 @@
 import { ScrollView, View } from 'react-native';
 
 import Header from '@/components/ui/Header';
+import CaloriesSection from './components/CaloriesSection';
+import HealthSummarySection from './components/HealthSummarySection';
 import HealthyActionPlan from './components/HealthyActionPlan';
 import QuickAccessSection from './components/QuickAccessSection';
-import HealthSummarySection from './components/HealthSummarySection';
 
 export default function HomeScreen() {
   return (
@@ -15,6 +16,7 @@ export default function HomeScreen() {
           <QuickAccessSection />
           <HealthSummarySection />
           <HealthyActionPlan />
+          <CaloriesSection />
         </View>
       </ScrollView>
     </View>
