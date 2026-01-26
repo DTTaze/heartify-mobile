@@ -4,6 +4,8 @@ export { default as BlueHeart } from './blue-heart-icon.svg';
 export { default as Book } from './book-line.svg';
 export { default as Calendar } from './calendar-icon.svg';
 export { default as Chat } from './chat-icon.svg';
+export { default as Cheese } from './cheese-icon.svg';
+export { default as Clock } from './clock-icon.svg';
 export { default as Cookie } from './cookie-icon.svg';
 export { default as Flamer } from './flamer-icon.svg';
 export { default as Footprint } from './footprint-icon.svg';

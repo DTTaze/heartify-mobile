@@ -1,7 +1,7 @@
 import { BubuRecommend } from '@/assets/icons';
 import { TextCustom } from '@/components/ui/TextCustom';
 import { useState } from 'react';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 import LifestyleContent from './components/LifestyleContent';
 import NutritionContent from './components/NutritionContent';
 import SegmentTab from './components/SegmentTab';
@@ -81,19 +81,6 @@ export default function HealthyActionPlan() {
         {activeSubTab === 'Nutritions' && <NutritionContent />}
         {activeSubTab === 'Lifestyle' && <LifestyleContent />}
         {activeSubTab === 'Sports' && <SportsContent />}
-
-        <TouchableOpacity
-          activeOpacity={0.8}
-          className="absolute bottom-6 right-10 flex-row items-center"
-        >
-          <View className="z-10 mb-4 mr-[-6px] rounded-full bg-neutral-black-200 px-2 py-1">
-            <Text className="font-qu-medium text-xs text-white">Ask BuBu</Text>
-          </View>
-
-          <View className="h-6 w-6 items-center justify-center rounded-full bg-white shadow-2xl">
-            <BubuRecommend />
-          </View>
-        </TouchableOpacity>
       </View>
     </View>
   );

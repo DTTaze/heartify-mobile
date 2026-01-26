@@ -7,17 +7,12 @@ import {
   Quicksand_700Bold,
   useFonts,
 } from '@expo-google-fonts/quicksand';
-import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
-} from '@react-navigation/native';
+import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import 'react-native-reanimated';
 import './global.css';
 
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { useColorScheme } from 'react-native';
 
 export const unstable_settings = {
   anchor: '(tabs)',
@@ -36,12 +31,11 @@ export default function RootLayout({
     'Quicksand-Bold': Quicksand_700Bold,
     'Baloo-Bold': BalooBhai2_700Bold,
   });
-  const colorScheme = useColorScheme();
 
   if (!loaded) return null;
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <ThemeProvider value={DefaultTheme}>
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen

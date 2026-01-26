@@ -1,6 +1,7 @@
 import { Book, Camera, Heart, Home, User } from '@/assets/icons';
 import { cn } from '@/lib/utils';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
+import { useRouter } from 'expo-router';
 import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { TextCustom } from '../TextCustom';
@@ -14,25 +15,43 @@ interface TabItem {
 
 // 2. Mảng dữ liệu Tabs
 const TABS: TabItem[] = [
-  { name: 'home', label: 'Home', icon: Home },
+  { name: 'index', label: 'Home', icon: Home },
   { name: 'health', label: 'Health', icon: Heart },
-  { name: 'camera', label: 'Camera', icon: Camera, isSpecial: true },
+  { name: 'record-details', label: 'Camera', icon: Camera, isSpecial: true },
   { name: 'records', label: 'Records', icon: Book },
   { name: 'profile', label: 'Profile', icon: User },
 ];
 
 export default function TabBarCustom({ state, navigation }: BottomTabBarProps) {
+  const router = useRouter();
+
   return (
     <View className="items-center bg-transparent pb-3">
       <View className="h-[81px] flex-row items-center justify-between gap-[6px] rounded-full border border-neutral-white-400 p-[10.5px]">
         {TABS.map((tab, index) => {
-          const isActive = state.index === index;
+          const isSpecial = tab.isSpecial;
+          const routeIndex = isSpecial ? -1 : index > 1 ? index - 1 : index;
+          const isActive = state.index === routeIndex;
           const IconComponent = tab.icon;
+
           const onPress = () => {
-            navigation.navigate(tab.name as never);
+            if (isSpecial) {
+              router.push('/(tabs)/record-details');
+              return;
+            }
+
+            const event = navigation.emit({
+              type: 'tabPress',
+              target: tab.name,
+              canPreventDefault: true,
+            });
+
+            if (!isActive && !event.defaultPrevented) {
+              navigation.navigate(tab.name);
+            }
           };
 
-          if (tab.isSpecial) {
+          if (isSpecial) {
             return (
               <TouchableOpacity
                 key={tab.name}
