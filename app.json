@@ -45,6 +45,19 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "c7cdbc6e-abc5-4a73-a44d-8d628dd0b559"
+      }
+    },
+    "owner": "heartify",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/c7cdbc6e-abc5-4a73-a44d-8d628dd0b559"
     }
   }
 }
