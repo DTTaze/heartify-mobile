@@ -1,10 +1,11 @@
 import { Book, Camera, Heart, Home, User } from '@/assets/icons';
 import { cn } from '@/lib/utils';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
-import { useRouter } from 'expo-router';
+import { usePathname, useRouter } from 'expo-router';
 import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { TextCustom } from '../TextCustom';
+import { Icon } from '@/components/icons/Icon';
 
 interface TabItem {
   name: string;
@@ -18,21 +19,36 @@ const TABS: TabItem[] = [
   { name: 'index', label: 'Home', icon: Home },
   { name: 'health', label: 'Health', icon: Heart },
   { name: 'record-details', label: 'Camera', icon: Camera, isSpecial: true },
-  { name: 'records', label: 'Records', icon: Book },
+  { name: 'discover', label: 'Discover', icon: Book },
   { name: 'profile', label: 'Profile', icon: User },
 ];
 
+const TAB_PATHS = {
+  index: '/(tabs)',
+  discover: '/(tabs)/discover',
+  profile: '/(tabs)/profile',
+  health: '/(tabs)/health',
+  'record-details': '/(tabs)/record-details',
+} as const;
+
 export default function TabBarCustom({ state, navigation }: BottomTabBarProps) {
   const router = useRouter();
+  const pathname = usePathname();
 
   return (
     <View className="items-center bg-transparent pb-3">
-      <View className="h-[81px] flex-row items-center justify-between gap-[6px] rounded-full border border-neutral-white-400 p-[10.5px]">
+      <View className="h-[81px] flex-row items-center justify-between gap-[6px] p-[10.5px]">
         {TABS.map((tab, index) => {
           const isSpecial = tab.isSpecial;
-          const routeIndex = isSpecial ? -1 : index > 1 ? index - 1 : index;
-          const isActive = state.index === routeIndex;
-          const IconComponent = tab.icon;
+          const isActive =
+            !isSpecial &&
+            // Case 1: Tab Index (xử lý riêng)
+            ((tab.name === 'index' &&
+              (pathname === '/' || pathname === '/home')) || // Thêm các alias nếu có
+              // Case 2: Các Tab thường
+              pathname === `/${tab.name}` ||
+              // Case 3: Màn hình con (Nested)
+              pathname.startsWith(`/${tab.name}/`));
 
           const onPress = () => {
             if (isSpecial) {
@@ -40,15 +56,13 @@ export default function TabBarCustom({ state, navigation }: BottomTabBarProps) {
               return;
             }
 
-            const event = navigation.emit({
-              type: 'tabPress',
-              target: tab.name,
-              canPreventDefault: true,
-            });
-
-            if (!isActive && !event.defaultPrevented) {
-              navigation.navigate(tab.name);
+            if (tab.name === 'index') {
+              router.push('/(tabs)');
+              return;
             }
+
+            // Các tab còn lại: discover, profile, health...
+            router.push(TAB_PATHS[tab.name as keyof typeof TAB_PATHS] as any);
           };
 
           if (isSpecial) {
@@ -60,7 +74,7 @@ export default function TabBarCustom({ state, navigation }: BottomTabBarProps) {
                 className="items-center justify-center"
               >
                 <View className="h-[65px] w-[65px] items-center justify-center rounded-full bg-[#666666]">
-                  <IconComponent size={35} />
+                  <Icon size={35} icon={tab.icon as React.FC<any>} />
                 </View>
               </TouchableOpacity>
             );
@@ -79,7 +93,7 @@ export default function TabBarCustom({ state, navigation }: BottomTabBarProps) {
                   isActive ? 'bg-white' : 'bg-transparent',
                 )}
               >
-                <IconComponent size={24} />
+                <Icon size={24} icon={tab.icon as React.FC<any>} />
                 <TextCustom className="font-qu-bold text-xs">
                   {tab.label}
                 </TextCustom>
