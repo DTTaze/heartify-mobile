@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 import SegmentTab from './components/SegmentTab';
 import RecipesSegment from './recipes/RecipesSegment';
+import SportsSegment from './sports/SportsSegment';
 
 const Discover = () => {
   const [activeTab, setActiveTab] = useState('Recipes');
@@ -53,6 +54,8 @@ const Discover = () => {
           </View>
 
           {activeTab === 'Recipes' && <RecipesSegment />}
+          {activeTab === 'Sports' && <SportsSegment />}
+          {activeTab === 'Lifestyle' && <RecipesSegment />}
         </View>
       </ScrollView>
     </View>

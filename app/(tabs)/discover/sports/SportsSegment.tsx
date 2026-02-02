@@ -2,8 +2,7 @@ import { Search } from '@/assets/icons';
 import { Icon } from '@/components/icons/Icon';
 import React from 'react';
 import { Text, TextInput, TouchableOpacity, View } from 'react-native';
-import RecipeCard, { RecipeCardProps } from './components/RecipeCard';
-import RecipesSelect from './components/RecipesSelect';
+import SportCard, { SportCardProps } from './components/SportCard';
 
 const categories = [
   'Fried rice',
@@ -14,50 +13,59 @@ const categories = [
   'Nut salad',
 ];
 
-export const FAKE_DATA: RecipeCardProps[] = [
+export const FAKE_DATA: SportCardProps[] = [
   {
     id: '1',
-    name: 'Pan-Seared Chicken & Nut Salad',
+    name: 'Morning Running',
     description:
-      'This dish combines lean protein and heart-healthy fats to support cardiovascular health.',
-    imageUrl: require('@/assets/images/mock-meal-1.png'),
-    prepTime: '5 mins - 10 mins',
-    serves: '1-2 people',
-    difficulty: 'Quick & simple',
+      'A light cardio exercise to warm up the body and improve endurance.',
+    imageUrl: require('@/assets/images/mock-workout.png'),
+    prepTime: '10 mins',
+    difficult: 'Easy',
+    calories: '200 kcal',
   },
   {
     id: '2',
-    name: 'Grilled Salmon with Asparagus',
+    name: 'Push Ups',
     description:
-      'Fresh Atlantic salmon grilled to perfection with a side of crispy seasoned asparagus.',
-    imageUrl: require('@/assets/images/mock-meal-1.png'),
-    prepTime: '15 mins - 20 mins',
-    serves: '2 people',
-    difficulty: 'Intermediate',
+      'Strengthens chest, shoulders, and arms. Can be done anywhere.',
+    imageUrl: require('@/assets/images/mock-workout.png'),
+    prepTime: '5 mins',
+    difficult: 'Medium',
+    calories: '150 kcal',
   },
   {
     id: '3',
-    name: 'Classic Beef Burger',
-    description:
-      'Juicy beef patty with melted cheddar, fresh lettuce, and our secret house sauce.',
-    imageUrl: require('@/assets/images/mock-meal-1.png'),
-    prepTime: '10 mins - 15 mins',
-    serves: '1 person',
-    difficulty: 'Easy',
+    name: 'Sit Ups',
+    description: 'Focuses on core muscles and helps build abdominal strength.',
+    imageUrl: require('@/assets/images/mock-workout.png'),
+    prepTime: '8 mins',
+    difficult: 'Medium',
+    calories: '180 kcal',
   },
   {
     id: '4',
-    name: 'Vegan Buddha Bowl',
+    name: 'Plank',
     description:
-      'A colorful mix of quinoa, roasted chickpeas, avocado, and tahini dressing.',
-    imageUrl: require('@/assets/images/mock-meal-1.png'),
-    prepTime: '20 mins',
-    serves: '1-2 people',
-    difficulty: 'Simple',
+      'A full-body exercise that improves posture and core stability.',
+    imageUrl: require('@/assets/images/mock-workout.png'),
+    prepTime: '4 mins',
+    difficult: 'Hard',
+    calories: '120 kcal',
+  },
+  {
+    id: '5',
+    name: 'Jump Rope',
+    description:
+      'A high-intensity workout that burns calories and improves coordination.',
+    imageUrl: require('@/assets/images/mock-workout.png'),
+    prepTime: '6 mins',
+    difficult: 'Hard',
+    calories: '300 kcal',
   },
 ];
 
-const RecipesSegment = () => {
+const SportsSegment = () => {
   return (
     <View>
       <View className="flex-row items-center rounded-full border border-slate-400 p-1">
@@ -83,25 +91,25 @@ const RecipesSegment = () => {
         ))}
       </View>
 
-      <RecipesSelect />
+      {/* <RecipesSelect /> */}
 
       <View className="mt-3 py-1">
         <Text className="text-center font-qu-bold text-xl text-neutral-black-500">
-          Nutritious Bites
+          Active moves
         </Text>
       </View>
 
       <View className="mt-4 flex gap-4">
         {FAKE_DATA.map((item) => (
-          <RecipeCard
+          <SportCard
             key={item.id}
             id={item.id}
             name={item.name}
             description={item.description}
             imageUrl={item.imageUrl}
             prepTime={item.prepTime}
-            serves={item.serves}
-            difficulty={item.difficulty}
+            calories={item.calories}
+            difficult={item.difficult}
           />
         ))}
       </View>
@@ -109,4 +117,4 @@ const RecipesSegment = () => {
   );
 };
 
-export default RecipesSegment;
+export default SportsSegment;
