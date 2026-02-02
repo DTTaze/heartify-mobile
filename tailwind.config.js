@@ -5,6 +5,9 @@ module.exports = {
   presets: [require('nativewind/preset')],
   theme: {
     extend: {
+      boxShadow: {
+        card: '0px 4px 16px 0px rgba(0,0,0,0.1)',
+      },
       fontFamily: {
         'qu-light': ['Quicksand-Light'],
         'qu-regular': ['Quicksand-Regular'],
@@ -96,7 +99,7 @@ module.exports = {
           '24px',
           {
             lineHeight: '30px',
-            fontWeight: '600',
+            fontWeight: '700',
           },
         ],
         h3: [

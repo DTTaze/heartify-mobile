@@ -6,7 +6,7 @@ import { TextCustom } from '@/components/ui/TextCustom';
 export default function ManualEntrySection() {
   return (
     <Section title="">
-      <TextCustom className="text-center text-h1 font-semibold text-primary-700">
+      <TextCustom className="text-center text-h1 font-semibold text-primary-700 ">
         Manual Entry
       </TextCustom>
       <Input

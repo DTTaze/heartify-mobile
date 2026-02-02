@@ -1,4 +1,4 @@
-import Button from '@/components/ui/Button';
+import { Button } from '@/components/ui/Button';
 import { ScrollView, View } from 'react-native';
 import BloodLipidsSection from './components/BloodLipidsSection';
 import BloodPressureSection from './components/BloodPressureSection';
@@ -20,7 +20,7 @@ export default function RecordDetailsScreen() {
       <NotesSection />
 
       <View className="mb-10">
-        <Button title="Submit" className="rounded-3xl bg-primary-500" />
+        <Button className="rounded-3xl bg-primary-500">Submit</Button>
       </View>
     </ScrollView>
   );
