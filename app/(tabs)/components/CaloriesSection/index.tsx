@@ -10,7 +10,7 @@ const CaloriesSection = () => {
     <View className="space-y-4 rounded-lg bg-neutral-white-200 p-2 shadow-lg">
       <View className="flex-row items-center gap-1">
         <Flamer />
-        <Text className="font-qu-bold text-xl text-primary-700">
+        <Text className="font-qu-bold text-h3 text-primary-700">
           Calories: Intake & Consumption
         </Text>
       </View>

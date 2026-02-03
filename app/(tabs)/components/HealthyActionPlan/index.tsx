@@ -10,7 +10,7 @@ export default function HealthyActionPlan() {
 
   return (
     <View className="flex-1 bg-white pt-10">
-      <Text className="mb-2 font-qu-semibold text-2xl text-primary-800">
+      <Text className="mb-2 font-qu-bold text-h2 text-primary-800">
         Daily Wellness Blueprint
       </Text>
 

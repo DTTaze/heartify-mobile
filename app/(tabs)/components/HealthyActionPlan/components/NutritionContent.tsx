@@ -1,5 +1,6 @@
 import { BubuRecommend, Cheese } from '@/assets/icons';
 import Button from '@/components/ui/Button';
+import { useRouter } from 'expo-router';
 import { Clock } from 'lucide-react-native';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
 
@@ -21,6 +22,12 @@ const recipes = [
 ];
 
 export default function NutritionContent() {
+  const router = useRouter();
+
+  const onPress = () => {
+    router.push('/(tabs)/discover');
+  };
+
   return (
     <View className="rounded-lg border border-[#B6D3ED] p-4">
       <View className="rounded-xl bg-white">
@@ -66,6 +73,7 @@ export default function NutritionContent() {
             title="View all ->"
             className="rounded-full bg-primary-100 px-3 py-2"
             textClassName="text-neutral-black-400"
+            onPress={onPress}
           />
         </View>
 

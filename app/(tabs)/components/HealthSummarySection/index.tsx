@@ -35,7 +35,7 @@ const HealthSummarySection = () => {
   return (
     <View>
       <View className="rounded-xl bg-neutral-white-300 p-3">
-        <Text className="font-qu-bold text-h1 text-neutral-black-500">
+        <Text className="font-qu-bold text-h2 text-neutral-black-500">
           Health Overview
         </Text>
         <Text className="mt-1 font-qu-regular text-base text-neutral-black-500">
