@@ -14,10 +14,12 @@ export default function SubTab({
       onPress={onPress}
       activeOpacity={0.85}
       className={`flex-1 items-center rounded-full py-2 ${
-        active ? 'bg-white' : ''
+        active ? 'bg-primary-500' : ''
       }`}
     >
-      <Text className={`font-semibold ${active ? 'text-black' : 'text-white'}`}>
+      <Text
+        className={`font-qu-semibold text-sm ${active ? 'text-white' : 'text-black'}`}
+      >
         {label}
       </Text>
     </TouchableOpacity>

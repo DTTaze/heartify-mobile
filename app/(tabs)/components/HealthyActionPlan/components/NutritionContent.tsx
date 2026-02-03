@@ -1,5 +1,6 @@
-import { BubuRecommend, Cheese, Clock } from '@/assets/icons';
+import { BubuRecommend, Cheese } from '@/assets/icons';
 import Button from '@/components/ui/Button';
+import { Clock } from 'lucide-react-native';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
 
 const recipes = [
@@ -21,8 +22,8 @@ const recipes = [
 
 export default function NutritionContent() {
   return (
-    <View>
-      <View className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
+    <View className="rounded-lg border border-[#B6D3ED] p-4">
+      <View className="rounded-xl bg-white">
         <Text className="mb-3 font-qu-semibold text-base">
           🍎 <Text>Today’s suggestion</Text>
           {'\n'}
@@ -44,7 +45,7 @@ export default function NutritionContent() {
 
         <TouchableOpacity
           activeOpacity={0.8}
-          className="absolute bottom-3 right-5 flex-row items-center"
+          className="absolute bottom-1 right-5 flex-row items-center"
         >
           <View className="z-10 mb-4 mr-[-6px] rounded-full bg-neutral-black-200 px-2 py-1">
             <Text className="font-qu-medium text-xs text-white">Ask BuBu</Text>
@@ -56,7 +57,7 @@ export default function NutritionContent() {
         </TouchableOpacity>
       </View>
 
-      <View className="mt-6">
+      <View className="mt-6 rounded-xl bg-primary-50 p-3 shadow-sm">
         <View className="flex-row items-center justify-between">
           <Text className="mb-3 font-qu-bold text-xl text-primary-700">
             Suggested recipe
@@ -83,17 +84,17 @@ export default function NutritionContent() {
               />
 
               {/* Thông tin món ăn */}
-              <View className="ml-4 flex-1 justify-center">
+              <View className="ml-4 w-full flex-1 justify-center">
                 <Text
-                  className="font-qu-seminbold mb-2 text-base text-neutral-black-500"
+                  className="mb-2 font-qu-semibold text-base text-neutral-black-500"
                   numberOfLines={2}
                 >
                   {item.title}
                 </Text>
 
                 <View className="flex-row items-center">
-                  <View className="mr-5 flex-row items-center">
-                    <Clock />
+                  <View className="mr-5 flex-row items-center justify-start">
+                    <Clock size={18} color="#576379" />
                     <Text className="ml-1 font-qu-semibold text-base text-neutral-black-300">
                       {item.time}
                     </Text>

@@ -92,42 +92,42 @@ module.exports = {
           '28px',
           {
             lineHeight: '35px',
-            fontWeight: '700',
+            fontFamily: 'Quicksand-Bold',
           },
         ],
         h2: [
           '24px',
           {
             lineHeight: '30px',
-            fontWeight: '700',
+            fontFamily: 'Quicksand-SemiBold',
           },
         ],
         h3: [
           '20px',
           {
             lineHeight: '25px',
-            fontWeight: '700',
+            fontFamily: 'Quicksand-Bold',
           },
         ],
         1: [
           '16px',
           {
             lineHeight: '20px',
-            fontWeight: '600',
+            fontFamily: 'Quicksand-SemiBold',
           },
         ],
         2: [
           '14px',
           {
             lineHeight: '18px',
-            fontWeight: '600',
+            fontFamily: 'Quicksand-SemiBold',
           },
         ],
         3: [
           '12px',
           {
             lineHeight: '15px',
-            fontWeight: '500',
+            fontFamily: 'Quicksand-Medium',
           },
         ],
       },

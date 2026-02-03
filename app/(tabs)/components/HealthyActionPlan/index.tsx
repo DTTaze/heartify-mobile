@@ -1,60 +1,25 @@
-import { BubuRecommend } from '@/assets/icons';
-import { TextCustom } from '@/components/ui/TextCustom';
 import { useState } from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import LifestyleContent from './components/LifestyleContent';
 import NutritionContent from './components/NutritionContent';
-import SegmentTab from './components/SegmentTab';
 import SportsContent from './components/SportsContent';
 import SubSegmentTab from './components/SubSegmentTab';
 
 export default function HealthyActionPlan() {
-  const [activeTab, setActiveTab] = useState('BMI');
   const [activeSubTab, setActiveSubTab] = useState('Nutritions');
 
   return (
     <View className="flex-1 bg-white pt-10">
-      <Text className="mb-4 font-qu-semibold text-2xl text-primary-800">
-        Healthy action plan
+      <Text className="mb-2 font-qu-semibold text-2xl text-primary-800">
+        Daily Wellness Blueprint
       </Text>
 
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        className="mb-5"
-        contentContainerStyle={{ gap: 10 }}
-      >
-        <SegmentTab
-          label="BMI"
-          active={activeTab === 'BMI'}
-          onPress={() => setActiveTab('BMI')}
-        />
-        <SegmentTab
-          label="Heart Rate"
-          active={activeTab === 'Heart Rate'}
-          onPress={() => setActiveTab('Heart Rate')}
-        />
-        <SegmentTab
-          label="Blood Pressure"
-          active={activeTab === 'Blood Pressure'}
-          onPress={() => setActiveTab('Blood Pressure')}
-        />
-      </ScrollView>
+      <Text className="font-qu-semibold text-base">
+        Personalized insights based on your current well-being
+      </Text>
 
-      <View className="mb-7 rounded-lg bg-gray-100 p-4">
-        <View className="mb-7 flex-row  items-start gap-3">
-          <View className="h-8 w-8 items-center justify-center rounded-full bg-gray-300">
-            <BubuRecommend />
-          </View>
-
-          <View className="flex-1 rounded-[4px_16px_16px_16px] bg-neutral-white-100 px-2 py-1 shadow-lg">
-            <TextCustom className="flex-1 font-qu-semibold text-black">
-              All vitals are in the green zone! Here is how to stay there
-            </TextCustom>
-          </View>
-        </View>
-
-        <View className="mb-6 flex-row rounded-full bg-neutral-black-200 p-2">
+      <View className="mb-7 mt-6 rounded-lg">
+        <View className="mb-6 flex-row rounded-full border border-primary-500 bg-white p-2">
           <SubSegmentTab
             label="Nutritions"
             active={activeSubTab === 'Nutritions'}
@@ -73,10 +38,6 @@ export default function HealthyActionPlan() {
             onPress={() => setActiveSubTab('Sports')}
           />
         </View>
-
-        <Text className="mb-3 font-qu-bold text-xl text-primary-700">
-          Recommendations
-        </Text>
 
         {activeSubTab === 'Nutritions' && <NutritionContent />}
         {activeSubTab === 'Lifestyle' && <LifestyleContent />}
