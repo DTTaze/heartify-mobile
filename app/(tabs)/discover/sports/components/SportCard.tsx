@@ -1,7 +1,6 @@
 import { Bookmark, Clock } from '@/assets/icons';
-import HeartIcon from '@/components/icons/HeartIcon';
 import { Icon } from '@/components/icons/Icon';
-import { ChartNoAxesColumnIncreasing, Flame } from 'lucide-react-native';
+import { ChartNoAxesColumnIncreasing, Flame, Heart } from 'lucide-react-native';
 import React from 'react';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
 
@@ -69,7 +68,7 @@ const SportCard = ({
           className="flex-row items-center rounded-lg bg-primary-300 px-4 py-2"
           activeOpacity={0.8}
         >
-          <HeartIcon color="#fff" size={20} />
+          <Heart color="#fff" size={20} />
           <Text className="ml-2 font-qu-semibold text-white">
             Recommend for you!
           </Text>

@@ -1,7 +1,7 @@
 import { BubuRecommend, Cheese } from '@/assets/icons';
-import Button from '@/components/ui/Button';
+import { Button } from '@/components/ui/Button';
 import { useRouter } from 'expo-router';
-import { Clock } from 'lucide-react-native';
+import { ArrowRight, Clock } from 'lucide-react-native';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
 
 const recipes = [
@@ -70,11 +70,14 @@ export default function NutritionContent() {
             Suggested recipe
           </Text>
           <Button
-            title="View all ->"
-            className="rounded-full bg-primary-100 px-3 py-2"
-            textClassName="text-neutral-black-400"
+            className="flex-row rounded-full bg-primary-100 px-3 py-2"
             onPress={onPress}
-          />
+          >
+            <Text className="font-qu-semibold text-neutral-black-400">
+              View all
+            </Text>
+            <ArrowRight />
+          </Button>
         </View>
 
         <View className="mt-3 gap-3">
