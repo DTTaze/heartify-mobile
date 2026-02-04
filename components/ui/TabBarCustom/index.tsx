@@ -20,6 +20,7 @@ const TABS: TabItem[] = [
   { name: 'health', label: 'Health', icon: Heart },
   { name: 'record-details', label: 'Camera', icon: Camera, isSpecial: true },
   { name: 'discover', label: 'Discover', icon: Book },
+  { name: 'health-record', label: 'Records', icon: Book },
   { name: 'profile', label: 'Profile', icon: User },
 ];
 
@@ -59,6 +60,21 @@ export default function TabBarCustom({ state, navigation }: BottomTabBarProps) {
             if (tab.name === 'index') {
               router.push('/(tabs)');
               return;
+            }
+
+            if (tab.name === 'health-record') {
+              router.push('/(tabs)/health-record');
+              return;
+            }
+
+            const event = navigation.emit({
+              type: 'tabPress',
+              target: tab.name,
+              canPreventDefault: true,
+            });
+
+            if (!isActive && !event.defaultPrevented) {
+              navigation.navigate(tab.name);
             }
 
             // Các tab còn lại: discover, profile, health...
