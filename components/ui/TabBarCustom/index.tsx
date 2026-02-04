@@ -18,7 +18,7 @@ const TABS: TabItem[] = [
   { name: 'index', label: 'Home', icon: Home },
   { name: 'health', label: 'Health', icon: Heart },
   { name: 'record-details', label: 'Camera', icon: Camera, isSpecial: true },
-  { name: 'records', label: 'Records', icon: Book },
+  { name: 'health-record', label: 'Records', icon: Book },
   { name: 'profile', label: 'Profile', icon: User },
 ];
 
@@ -37,6 +37,11 @@ export default function TabBarCustom({ state, navigation }: BottomTabBarProps) {
           const onPress = () => {
             if (isSpecial) {
               router.push('/(tabs)/record-details');
+              return;
+            }
+
+            if (tab.name === 'health-record') {
+              router.push('/(tabs)/health-record');
               return;
             }
 
