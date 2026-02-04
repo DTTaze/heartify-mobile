@@ -25,7 +25,7 @@ export const ProfileBanner = () => {
         </View>
 
         <Text
-          className="mb-1 ml-3 text-2xl font-bold text-white drop-shadow-md"
+          className="mb-1 ml-3 font-qu-bold text-2xl text-white drop-shadow-md"
           style={{
             textShadowColor: 'rgba(0, 0, 0, 0.3)',
             textShadowOffset: { width: 0, height: 1 },

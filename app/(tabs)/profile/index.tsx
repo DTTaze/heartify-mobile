@@ -15,7 +15,7 @@ const ProfilePage = () => {
     >
       <ProfileBanner />
 
-      <Text className="mx-4 mb-3 mt-6 text-h3 font-bold text-slate-800">
+      <Text className="mx-4 mb-3 mt-6 font-qu-bold text-h3 text-slate-800">
         Basic information
       </Text>
 
@@ -23,7 +23,7 @@ const ProfilePage = () => {
 
       <RecordsButton />
 
-      <Text className="mx-4 mb-3 mt-8 text-h3 font-bold text-slate-800">
+      <Text className="mx-4 mb-3 mt-8 font-qu-bold text-h3 text-slate-800">
         Health Profile
       </Text>
 

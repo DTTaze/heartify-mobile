@@ -10,7 +10,7 @@ export const RecordsButton = () => {
       <View className="flex-row items-center">
         <FileIcon size={20} color="#1F2937" />
 
-        <Text className="ml-2 font-semibold text-gray-900">
+        <Text className="ml-2 font-qu-semibold text-gray-900">
           View all records
         </Text>
       </View>

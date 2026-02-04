@@ -2,7 +2,7 @@ import React from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import { Text } from '@/components/ui/Text';
 import { Footprint } from '@/assets/icons';
-import { PlusIcon } from '@/components/icons/PlusIcon';
+import { Plus } from 'lucide-react-native';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 
 export const HealthGoalSection = () => {
@@ -15,13 +15,13 @@ export const HealthGoalSection = () => {
               <Footprint width={16} height={16} color="white" />
             </View>
 
-            <Text className="text-lg font-semibold text-blue-500">
+            <Text className="font-qu-semibold text-lg text-blue-500">
               Health goal
             </Text>
           </View>
 
           <TouchableOpacity>
-            <PlusIcon size={24} color="#6B7280" />
+            <Plus size={24} color="#6B7280" />
           </TouchableOpacity>
         </View>
 
@@ -42,7 +42,7 @@ export const HealthGoalSection = () => {
 
       <View className="px-4 py-2">
         <View className="flex-row items-center justify-between py-3">
-          <Text className="font-medium text-gray-800">
+          <Text className="font-qu-medium text-gray-800">
             Daily steps (avg): 6,500 steps
           </Text>
 
@@ -52,7 +52,7 @@ export const HealthGoalSection = () => {
         <View className="h-[1px] bg-gray-100" />
 
         <View className="flex-row items-center justify-between py-3">
-          <Text className="font-medium text-gray-800">
+          <Text className="font-qu-medium text-gray-800">
             Physical activity level: Moderately active
           </Text>
 
@@ -61,7 +61,7 @@ export const HealthGoalSection = () => {
         <View className="h-[1px] bg-gray-100" />
 
         <View className="flex-row items-center justify-between py-3">
-          <Text className="font-medium text-gray-800">
+          <Text className="font-qu-medium text-gray-800">
             Exercise frequency: 3-4 times / week
           </Text>
 
@@ -70,7 +70,7 @@ export const HealthGoalSection = () => {
         <View className="h-[1px] bg-gray-100" />
 
         <View className="flex-row items-center justify-between py-3">
-          <Text className="font-medium text-gray-800">
+          <Text className="font-qu-medium text-gray-800">
             Screen time: High (8-9 hours/day)
           </Text>
 

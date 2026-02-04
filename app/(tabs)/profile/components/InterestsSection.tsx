@@ -14,7 +14,7 @@ export const InterestsSection = () => {
               <Heart width={16} height={16} color="white" />
             </View>
 
-            <Text className="text-lg font-semibold text-blue-500">
+            <Text className="font-qu-semibold text-lg text-blue-500">
               Interests & Preferences
             </Text>
           </View>
@@ -38,19 +38,23 @@ export const InterestsSection = () => {
         </View>
 
         <View className="mt-3 space-y-2 pl-2">
-          <Text className="text-base font-medium text-gray-800">• Walking</Text>
+          <Text className="font-qu-medium text-base text-gray-800">
+            • Walking
+          </Text>
 
-          <Text className="text-base font-medium text-gray-800">
+          <Text className="font-qu-medium text-base text-gray-800">
             • Gym workouts
           </Text>
 
-          <Text className="text-base font-medium text-gray-800">• Cycling</Text>
+          <Text className="font-qu-medium text-base text-gray-800">
+            • Cycling
+          </Text>
 
-          <Text className="text-base font-medium text-gray-800">
+          <Text className="font-qu-medium text-base text-gray-800">
             • Healthy cooking
           </Text>
 
-          <Text className="text-base font-medium text-gray-800">
+          <Text className="font-qu-medium text-base text-gray-800">
             • Listening to podcasts
           </Text>
         </View>
