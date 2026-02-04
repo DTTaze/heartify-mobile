@@ -26,7 +26,7 @@ const Text = forwardRef<TextRef, SlottableTextProps & TextProps>(
       <Component
         ref={ref}
         className={cn(
-          'font-be-regular text-neutral-black text-base',
+          'text-neutral-black font-qu-regular text-base',
           textClass,
           className,
         )}
