@@ -28,6 +28,10 @@ export default function NutritionContent() {
     router.push('/(tabs)/discover');
   };
 
+  const onNavChat = () => {
+    router.push('/chatbot');
+  };
+
   return (
     <View className="rounded-lg border border-[#B6D3ED] p-4">
       <View className="rounded-xl bg-white">
@@ -53,6 +57,7 @@ export default function NutritionContent() {
         <TouchableOpacity
           activeOpacity={0.8}
           className="absolute bottom-1 right-5 flex-row items-center"
+          onPress={onNavChat}
         >
           <View className="z-10 mb-4 mr-[-6px] rounded-full bg-neutral-black-200 px-2 py-1">
             <Text className="font-qu-medium text-xs text-white">Ask BuBu</Text>
