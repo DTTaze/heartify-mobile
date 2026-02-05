@@ -1,5 +1,5 @@
 import { BubuRecommend, Cheese, Clock } from '@/assets/icons';
-import Button from '@/components/ui/Button';
+import { Button } from '@/components/ui/Button';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
 
 const recipes = [
@@ -61,11 +61,9 @@ export default function NutritionContent() {
           <Text className="mb-3 font-qu-bold text-xl text-primary-700">
             Suggested recipe
           </Text>
-          <Button
-            title="View all ->"
-            className="rounded-full bg-primary-100 px-3 py-2"
-            textClassName="text-neutral-black-400"
-          />
+          <Button className="rounded-full bg-primary-100 px-3 py-2 text-neutral-black-400">
+            View all
+          </Button>
         </View>
 
         <View className="mt-3 gap-3">
