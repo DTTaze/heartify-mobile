@@ -20,7 +20,7 @@ const TABS: TabItem[] = [
   { name: 'health', label: 'Health', icon: Heart },
   { name: 'record-details', label: 'Camera', icon: Camera, isSpecial: true },
   { name: 'discover', label: 'Discover', icon: Book },
-  { name: 'health-record', label: 'Records', icon: Book },
+  // { name: 'health-record', label: 'Records', icon: Book },
   { name: 'profile', label: 'Profile', icon: User },
 ];
 
