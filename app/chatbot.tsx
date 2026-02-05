@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   FlatList,
   Image,
@@ -24,19 +24,121 @@ import {
 import BubuAvatar from '@/assets/images/bubu-recommend.svg';
 import { Text } from '@/components/ui/Text';
 import { cn } from '@/app/lib/cn';
-import {
-  chatHistory,
-  Message,
-  suggestedQuestions,
-} from '@/constants/chatMockData';
+import { Message, suggestedQuestions } from '@/constants/chatMockData';
+import { ChatbotApi } from '@/src/api/chatbot.api';
+import { api } from '@/src/services/api.instance';
+import { TypingIndicator } from '@/components/TypingIndicator';
+import { getMessageText } from '@/lib/utils';
+import Markdown from 'react-native-markdown-display';
 
 // User avatar placeholder
 const UserAvatar = require('@/assets/images/mock-avatar.png');
+const markdownStyles = {
+  body: {
+    fontSize: 16,
+    lineHeight: 20,
+    color: '#000000',
+    fontFamily: 'Quicksand-SemiBold',
+  },
+  paragraph: {
+    marginBottom: 8,
+  },
+  bullet_list: {
+    paddingLeft: 12,
+  },
+};
 
 export default function ChatbotScreen() {
   const router = useRouter();
-  const [messages, setMessages] = useState<Message[]>(chatHistory);
+  const flatListRef = React.useRef<FlatList>(null);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState('');
+  const [suggestedQuestionsList, setSuggestedQuestionsList] =
+    useState<string[]>(suggestedQuestions);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const fetchHistory = async () => {
+    try {
+      const response = await ChatbotApi.getHistoryMessages({
+        offset: 0,
+        limit: 50,
+      });
+
+      if (response.ok && response.data && response.data.data) {
+        const history = response.data.data.rows
+          .map((item) => ({
+            id: item.id,
+            text: getMessageText(item),
+            sender: (item.role === 'user' ? 'user' : 'bot') as 'user' | 'bot',
+            timestamp: item.created_at,
+          }))
+          .reverse();
+        setMessages(history);
+      }
+    } catch (error) {
+      console.error('Failed to fetch history', error);
+    }
+  };
+
+  useEffect(() => {
+    api.setAuthToken(
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImYyYWViMzAzLWRmYWQtNDFhMC1iNWVmLWJlYzg2NWIxYjg2NCIsImlhdCI6MTc3MDI3MTI4MCwiZXhwIjoxODAxODA3MjgwfQ.U038iCs81qT25HIz3b__ybLyJ5Bk8gL_UJQ7Ft4savg',
+    );
+    fetchHistory();
+  }, []);
+
+  const sendMessageToApi = async (text: string) => {
+    try {
+      setIsLoading(true);
+
+      const [response] = await Promise.all([
+        ChatbotApi.sendMessage(text),
+        new Promise((resolve) => setTimeout(resolve, 2000)),
+      ]);
+
+      setIsLoading(false);
+
+      if (response.ok && response.data && response.data.data) {
+        const botMsg: Message = {
+          id: (Date.now() + 1).toString(),
+          text: response.data.data.response,
+          sender: 'bot',
+          timestamp: 'Now',
+        };
+        setMessages((prev) => [...prev, botMsg]);
+
+        if (
+          response.data.data.suggested_actions &&
+          response.data.data.suggested_actions.length > 0
+        ) {
+          setSuggestedQuestionsList(response.data.data.suggested_actions);
+        }
+      } else {
+        console.error('Failed to send message', response.problem);
+      }
+    } catch (error) {
+      setIsLoading(false);
+      console.error('Error sending message', error);
+    }
+  };
+
+  const handleSendMessage = async () => {
+    if (!inputText.trim()) return;
+
+    const userMsgText = inputText;
+    setInputText('');
+    setSuggestedQuestionsList([]); // Clear suggestions
+
+    const newMsg: Message = {
+      id: Date.now().toString(),
+      text: userMsgText,
+      sender: 'user',
+      timestamp: 'Now',
+    };
+    setMessages((prev) => [...prev, newMsg]);
+
+    await sendMessageToApi(userMsgText);
+  };
 
   const renderMessage = ({ item }: { item: Message }) => {
     const isBot = item.sender === 'bot';
@@ -58,9 +160,7 @@ export default function ChatbotScreen() {
               !isBot && 'border-primary-500',
             )}
           >
-            <Text className="font-qu-medium text-[17px] leading-6 text-neutral-800">
-              {item.text}
-            </Text>
+            <Markdown style={markdownStyles}>{item.text}</Markdown>
           </View>
 
           {/* Bot Actions */}
@@ -120,41 +220,53 @@ export default function ChatbotScreen() {
       {/* Chat Area */}
       <View className="flex-1 bg-white">
         <FlatList
+          ref={flatListRef}
           data={messages}
           keyExtractor={(item) => item.id}
           renderItem={renderMessage}
-          contentContainerStyle={{ padding: 16, paddingBottom: 100 }}
+          contentContainerStyle={{ padding: 16, paddingBottom: 20 }}
           showsVerticalScrollIndicator={false}
+          onContentSizeChange={() =>
+            flatListRef.current?.scrollToEnd({ animated: true })
+          }
+          onLayout={() => flatListRef.current?.scrollToEnd({ animated: true })}
           ListHeaderComponent={() => (
             <Text className="mb-6 text-center font-qu-medium text-sm text-primary-300">
               Today
             </Text>
           )}
+          ListFooterComponent={() => (
+            <View>
+              {isLoading && <TypingIndicator />}
+              {!isLoading && suggestedQuestionsList.length > 0 && (
+                <View className="mt-4 items-end">
+                  {suggestedQuestionsList.map((q, index) => (
+                    <TouchableOpacity
+                      key={index}
+                      className="mb-2 max-w-[80%] rounded-2xl border border-primary-100 bg-primary-50 px-4 py-3"
+                      onPress={() => {
+                        const newMsg: Message = {
+                          id: Date.now().toString(),
+                          text: q,
+                          sender: 'user',
+                          timestamp: 'Now',
+                        };
+                        setMessages((prev) => [...prev, newMsg]);
+                        setSuggestedQuestionsList([]);
+                        sendMessageToApi(q);
+                      }}
+                    >
+                      <Text className="font-qu-medium text-neutral-800">
+                        {q}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              )}
+            </View>
+          )}
           ItemSeparatorComponent={() => <View className="h-2" />}
         />
-
-        {/* Suggested QuestionsOverlay */}
-        {messages.length === 1 && (
-          <View className="pointer-events-box-none absolute bottom-4 right-4 items-end">
-            {suggestedQuestions.map((q, index) => (
-              <TouchableOpacity
-                key={index}
-                className="mb-2 max-w-[80%] rounded-2xl border border-primary-100 bg-primary-50 px-4 py-3"
-                onPress={() => {
-                  const newMsg: Message = {
-                    id: Date.now().toString(),
-                    text: q,
-                    sender: 'user',
-                    timestamp: 'Now',
-                  };
-                  setMessages((prev) => [...prev, newMsg]);
-                }}
-              >
-                <Text className="font-qu-medium text-neutral-800">{q}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        )}
       </View>
 
       {/* Input Area */}
@@ -176,18 +288,7 @@ export default function ChatbotScreen() {
                 placeholderTextColor="#9CA3AF"
                 value={inputText}
                 onChangeText={setInputText}
-                onSubmitEditing={() => {
-                  if (inputText.trim()) {
-                    const newMsg: Message = {
-                      id: Date.now().toString(),
-                      text: inputText,
-                      sender: 'user',
-                      timestamp: 'Now',
-                    };
-                    setMessages((prev) => [...prev, newMsg]);
-                    setInputText('');
-                  }
-                }}
+                onSubmitEditing={handleSendMessage}
               />
               <TouchableOpacity className="p-2">
                 <Mic size={20} color="#6B7280" />
