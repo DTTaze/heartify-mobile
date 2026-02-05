@@ -27,6 +27,8 @@
     "@react-navigation/elements": "^2.6.3",
     "@react-navigation/native": "^7.1.8",
     "@rn-primitives/progress": "^1.2.0",
+    "apisauce": "^3.2.2",
+    "axios": "^1.13.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "expo": "^54.0.32",
