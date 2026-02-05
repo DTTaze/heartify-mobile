@@ -16,5 +16,5 @@ export const ChatbotApi = {
   getHistoryMessages: (
     paginate: PaginateRequest,
   ): Promise<ApiResponse<BaseResponse<PaginateResponse<historyMessage>>>> =>
-    api.get('/chatbot/history', paginate),
+    api.get('/agent/history', paginate),
 };

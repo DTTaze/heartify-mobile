@@ -285,10 +285,10 @@ export default function ChatbotScreen() {
               <Plus size={24} color="white" />
             </TouchableOpacity>
 
-            <View className="h-12 flex-1 flex-row items-center rounded-3xl border border-neutral-300 bg-white pr-2">
+            <View className="max-h-[120px] min-h-[48px] flex-1 flex-row items-end rounded-3xl border border-neutral-300 bg-white pb-1 pr-2">
               <TextInput
                 multiline
-                className="h-full flex-1 px-4 font-qu-medium text-base text-neutral-900"
+                className="flex-1 px-4 py-3 font-qu-medium text-base text-neutral-900"
                 placeholder="How are you feeling today?"
                 placeholderTextColor="#9CA3AF"
                 value={inputText}
@@ -298,11 +298,14 @@ export default function ChatbotScreen() {
                 placeholderClassName="pt-4"
               />
               {!isFocus ? (
-                <TouchableOpacity className="p-2">
+                <TouchableOpacity className="mb-0.5 p-2">
                   <Mic size={20} color="#6B7280" />
                 </TouchableOpacity>
               ) : (
-                <TouchableOpacity className="p-2" onPress={handleSendMessage}>
+                <TouchableOpacity
+                  className="mb-0.5 p-2"
+                  onPress={handleSendMessage}
+                >
                   <Send size={20} color="#6B7280" />
                 </TouchableOpacity>
               )}
