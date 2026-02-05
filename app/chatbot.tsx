@@ -20,6 +20,7 @@ import {
   ThumbsDown,
   Copy,
   RotateCcw,
+  Send,
 } from 'lucide-react-native';
 import BubuAvatar from '@/assets/images/bubu-recommend.svg';
 import { Text } from '@/components/ui/Text';
@@ -56,6 +57,7 @@ export default function ChatbotScreen() {
   const [suggestedQuestionsList, setSuggestedQuestionsList] =
     useState<string[]>(suggestedQuestions);
   const [isLoading, setIsLoading] = useState(false);
+  const [isFocus, setIsFocus] = useState(false);
 
   const fetchHistory = async () => {
     try {
@@ -127,6 +129,7 @@ export default function ChatbotScreen() {
 
     const userMsgText = inputText;
     setInputText('');
+    setIsFocus(false);
     setSuggestedQuestionsList([]); // Clear suggestions
 
     const newMsg: Message = {
@@ -217,65 +220,66 @@ export default function ChatbotScreen() {
         </TouchableOpacity>
       </View>
 
-      {/* Chat Area */}
-      <View className="flex-1 bg-white">
-        <FlatList
-          ref={flatListRef}
-          data={messages}
-          keyExtractor={(item) => item.id}
-          renderItem={renderMessage}
-          contentContainerStyle={{ padding: 16, paddingBottom: 20 }}
-          showsVerticalScrollIndicator={false}
-          onContentSizeChange={() =>
-            flatListRef.current?.scrollToEnd({ animated: true })
-          }
-          onLayout={() => flatListRef.current?.scrollToEnd({ animated: true })}
-          ListHeaderComponent={() => (
-            <Text className="mb-6 text-center font-qu-medium text-sm text-primary-300">
-              Today
-            </Text>
-          )}
-          ListFooterComponent={() => (
-            <View>
-              {isLoading && <TypingIndicator />}
-              {!isLoading && suggestedQuestionsList.length > 0 && (
-                <View className="mt-4 items-end">
-                  {suggestedQuestionsList.map((q, index) => (
-                    <TouchableOpacity
-                      key={index}
-                      className="mb-2 max-w-[80%] rounded-2xl border border-primary-100 bg-primary-50 px-4 py-3"
-                      onPress={() => {
-                        const newMsg: Message = {
-                          id: Date.now().toString(),
-                          text: q,
-                          sender: 'user',
-                          timestamp: 'Now',
-                        };
-                        setMessages((prev) => [...prev, newMsg]);
-                        setSuggestedQuestionsList([]);
-                        sendMessageToApi(q);
-                      }}
-                    >
-                      <Text className="font-qu-medium text-neutral-800">
-                        {q}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-              )}
-            </View>
-          )}
-          ItemSeparatorComponent={() => <View className="h-2" />}
-        />
-      </View>
-
-      {/* Input Area */}
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
-        className="bg-white"
+        style={{ flex: 1 }}
       >
-        <View className="border-t border-neutral-100 px-4 py-3 pb-8">
+        {/* Chat Area */}
+        <View className="flex-1 bg-white">
+          <FlatList
+            ref={flatListRef}
+            data={messages}
+            keyExtractor={(item) => item.id}
+            renderItem={renderMessage}
+            contentContainerStyle={{ padding: 16, paddingBottom: 20 }}
+            showsVerticalScrollIndicator={false}
+            onContentSizeChange={() =>
+              flatListRef.current?.scrollToEnd({ animated: true })
+            }
+            onLayout={() =>
+              flatListRef.current?.scrollToEnd({ animated: true })
+            }
+            ListHeaderComponent={() => (
+              <Text className="mb-6 text-center font-qu-medium text-sm text-primary-300">
+                Today
+              </Text>
+            )}
+            ListFooterComponent={() => (
+              <View>
+                {isLoading && <TypingIndicator />}
+                {!isLoading && suggestedQuestionsList.length > 0 && (
+                  <View className="mt-4 items-end">
+                    {suggestedQuestionsList.map((q, index) => (
+                      <TouchableOpacity
+                        key={index}
+                        className="mb-2 max-w-[80%] rounded-2xl border border-primary-100 bg-primary-50 px-4 py-3"
+                        onPress={() => {
+                          const newMsg: Message = {
+                            id: Date.now().toString(),
+                            text: q,
+                            sender: 'user',
+                            timestamp: 'Now',
+                          };
+                          setMessages((prev) => [...prev, newMsg]);
+                          setSuggestedQuestionsList([]);
+                          sendMessageToApi(q);
+                        }}
+                      >
+                        <Text className="font-qu-medium text-neutral-800">
+                          {q}
+                        </Text>
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                )}
+              </View>
+            )}
+            ItemSeparatorComponent={() => <View className="h-2" />}
+          />
+        </View>
+
+        {/* Input Area */}
+        <View className="border-t border-neutral-100 bg-white px-4 py-3 pb-4">
           <View className="flex-row items-center gap-3">
             <TouchableOpacity className="h-10 w-10 items-center justify-center rounded-full bg-neutral-black-200">
               <Plus size={24} color="white" />
@@ -283,16 +287,25 @@ export default function ChatbotScreen() {
 
             <View className="h-12 flex-1 flex-row items-center rounded-3xl border border-neutral-300 bg-white pr-2">
               <TextInput
+                multiline
                 className="h-full flex-1 px-4 font-qu-medium text-base text-neutral-900"
                 placeholder="How are you feeling today?"
                 placeholderTextColor="#9CA3AF"
                 value={inputText}
                 onChangeText={setInputText}
                 onSubmitEditing={handleSendMessage}
+                onFocus={() => setIsFocus(true)}
+                placeholderClassName="pt-4"
               />
-              <TouchableOpacity className="p-2">
-                <Mic size={20} color="#6B7280" />
-              </TouchableOpacity>
+              {!isFocus ? (
+                <TouchableOpacity className="p-2">
+                  <Mic size={20} color="#6B7280" />
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity className="p-2" onPress={handleSendMessage}>
+                  <Send size={20} color="#6B7280" />
+                </TouchableOpacity>
+              )}
             </View>
           </View>
         </View>

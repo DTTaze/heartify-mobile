@@ -11,7 +11,7 @@ export const ChatbotApi = {
   sendMessage: (
     message: string,
   ): Promise<ApiResponse<BaseResponse<sendMessageResponse>>> =>
-    api.post('/chatbot/message', { message }),
+    api.post('/agent/chat', { message }),
 
   getHistoryMessages: (
     paginate: PaginateRequest,
