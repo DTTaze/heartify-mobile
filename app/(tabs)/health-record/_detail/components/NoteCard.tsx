@@ -9,7 +9,7 @@ type Props = {
 
 export function NoteCard({ onEdit, onAskBuBu }: Props) {
   return (
-    <View className="gap-2">
+    <View className="mb-10 gap-2">
       <View className="flex-row justify-between py-2">
         <Text className="text-h3 text-[#485D81]">Note</Text>
 

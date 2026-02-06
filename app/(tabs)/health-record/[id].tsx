@@ -3,17 +3,17 @@ import { ScrollView, View } from 'react-native';
 import HeartRiskIndex from '@/app/(tabs)/health-record/_detail/components/HeartRiskIndex';
 import MedicalRecordDetails from '@/app/(tabs)/health-record/_detail/components/MedicalRecordDetails';
 import MedicalRecordSection from '@/app/(tabs)/health-record/_detail/components/MedicalRecordSection';
-import { BubuCheckInCard } from '@/app/(tabs)/heart-health-overview/components/BubuCheckInCard';
-import { NoteCard } from '@/app/(tabs)/heart-health-overview/components/NoteCard';
 import ChevronLeftIcon from '@/components/icons/ChevronLeftIcon';
 import EditIcon from '@/components/icons/PenIcon';
 import { Button } from '@/components/ui/Button';
 import { TextCustom } from '@/components/ui/TextCustom';
 import Header from '@/components/ui/Header';
+import { BubuCheckInCard } from '@/app/(tabs)/health-record/_detail/components/BubuCheckInCard';
+import { NoteCard } from '@/app/(tabs)/health-record/_detail/components/NoteCard';
 
 export default function HeartHealthOverview() {
   return (
-    <View className="flex-1 ">
+    <View className="flex-1 bg-white">
       <Header />
 
       <ScrollView className="flex-1 px-4 pb-24 pt-2">
