@@ -22,3 +22,4 @@ export { default as Search } from './search-icon.svg';
 export { default as Serve } from './serve-icon.svg';
 export { default as Settings } from './settings-icon.svg';
 export { default as User } from './user-line.svg';
+export { default as LogoHeartify } from './logo-heartify.svg';
