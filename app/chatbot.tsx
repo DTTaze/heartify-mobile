@@ -129,7 +129,7 @@ export default function ChatbotScreen() {
 
     const userMsgText = inputText;
     setInputText('');
-    setIsFocus(false);
+    setIsFocus(true);
     setSuggestedQuestionsList([]); // Clear suggestions
 
     const newMsg: Message = {
