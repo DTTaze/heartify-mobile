@@ -9,3 +9,14 @@ export interface HealthRecord {
   location: string;
   risk: HealthRiskLevel;
 }
+
+export interface RiskLevel {
+  min: number;
+  max: number;
+  label: string;
+  feeling: string;
+  heartColor: string;
+  bgColor: string;
+  borderColor: string;
+  dotColor: string;
+}
