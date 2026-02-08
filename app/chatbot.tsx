@@ -84,7 +84,7 @@ export default function ChatbotScreen() {
 
   useEffect(() => {
     api.setAuthToken(
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImYyYWViMzAzLWRmYWQtNDFhMC1iNWVmLWJlYzg2NWIxYjg2NCIsImlhdCI6MTc3MDI3MTI4MCwiZXhwIjoxODAxODA3MjgwfQ.U038iCs81qT25HIz3b__ybLyJ5Bk8gL_UJQ7Ft4savg',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIyYjVkZTc5LTVmMzAtNDUzMi05MTA2LTAwNzVlNjkyYWYwNCIsImlhdCI6MTc3MDU0NDczNSwiZXhwIjoxODAyMDgwNzM1fQ.ZVJfI7B7_-SDD11zHdFQ2TR9L7cwAUMSIVC1j7kC8eo',
     );
     fetchHistory();
   }, []);
