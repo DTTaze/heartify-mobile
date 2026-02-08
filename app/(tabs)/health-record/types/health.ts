@@ -2,6 +2,7 @@ export type HealthRiskLevel = 'low' | 'borderline' | 'moderate' | 'high';
 
 export interface HealthRecord {
   id: string;
+  healthRecordName: string;
   date: string; // recordedAt
   bmi: string; // measurements.bmi
   riskPercentage: string;
