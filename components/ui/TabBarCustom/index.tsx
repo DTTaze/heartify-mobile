@@ -28,7 +28,7 @@ const TAB_PATHS = {
   index: '/(tabs)',
   discover: '/(tabs)/discover',
   profile: '/(tabs)/profile',
-  health: '/(auth)/sign-up/email',
+  health: '/(auth)/sign-up/medical-history',
   'record-details': '/(tabs)/record-details',
 } as const;
 

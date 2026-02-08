@@ -19,28 +19,67 @@ import { Progress } from '@/components/ui/progress';
 export default function SignUpMedicalHistoryScreen() {
   const router = useRouter();
 
-  // State for form fields (simplified for UI demo)
+  // State for form fields
+  const [isSmoker, setIsSmoker] = useState<boolean | null>(null);
+  const [hasDiabetes, setHasDiabetes] = useState<boolean | null>(null);
+  const [hasHighBP, setHasHighBP] = useState<boolean | null>(null);
+
   const [allergies, setAllergies] = useState<string[]>([]);
-  const [medicalConditions, setMedicalConditions] = useState<string[]>([]);
+  const [otherAllergy, setOtherAllergy] = useState('');
+
   const [hasMedications, setHasMedications] = useState<boolean | null>(null);
+  const [medicationName, setMedicationName] = useState('');
+  const [showMedicationInfo, setShowMedicationInfo] = useState(false);
+
   const [limitations, setLimitations] = useState<string[]>([]);
+  const [otherLimitation, setOtherLimitation] = useState('');
+  const [showLimitationInfo, setShowLimitationInfo] = useState(false);
+
   const [consents, setConsents] = useState({
     emergency: false,
     ai: false,
-    accuracy: false,
   });
 
-  const toggleSelection = (
-    list: string[],
-    setList: (l: string[]) => void,
-    item: string,
-  ) => {
-    if (list.includes(item)) {
-      setList(list.filter((i) => i !== item));
+  const toggleAllergy = (item: string) => {
+    if (item === 'none') {
+      setAllergies(['none']);
+      setOtherAllergy('');
     } else {
-      setList([...list, item]);
+      let newAllergies = allergies.includes(item)
+        ? allergies.filter((i) => i !== item)
+        : [...allergies, item];
+
+      // Remove 'none' if other items are selected
+      if (newAllergies.includes('none')) {
+        newAllergies = newAllergies.filter((i) => i !== 'none');
+      }
+      setAllergies(newAllergies);
     }
   };
+
+  const toggleLimitation = (item: string) => {
+    if (item === 'no') {
+      setLimitations(['no']);
+      setOtherLimitation('');
+    } else {
+      let newLimitations = limitations.includes(item)
+        ? limitations.filter((i) => i !== item)
+        : [...limitations, item];
+
+      // Remove 'no' if other items are selected
+      if (newLimitations.includes('no')) {
+        newLimitations = newLimitations.filter((i) => i !== 'no');
+      }
+      setLimitations(newLimitations);
+    }
+  };
+
+  const isNextEnabled =
+    isSmoker !== null &&
+    hasDiabetes !== null &&
+    hasHighBP !== null &&
+    consents.emergency &&
+    consents.ai;
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -86,6 +125,51 @@ export default function SignUpMedicalHistoryScreen() {
 
             {/* Content */}
             <View className="mt-0 flex-1">
+              {/* Smoking */}
+              <Section title="Smoking" subtitle="Do you smoke?">
+                <CheckBoxRow
+                  label="Yes"
+                  isChecked={isSmoker === true}
+                  onPress={() => setIsSmoker(true)}
+                />
+                <CheckBoxRow
+                  label="No"
+                  isChecked={isSmoker === false}
+                  onPress={() => setIsSmoker(false)}
+                />
+              </Section>
+
+              {/* Diabetes */}
+              <Section title="Diabetes" subtitle="Do you have diabetes?">
+                <CheckBoxRow
+                  label="Yes"
+                  isChecked={hasDiabetes === true}
+                  onPress={() => setHasDiabetes(true)}
+                />
+                <CheckBoxRow
+                  label="No"
+                  isChecked={hasDiabetes === false}
+                  onPress={() => setHasDiabetes(false)}
+                />
+              </Section>
+
+              {/* Blood Pressure */}
+              <Section
+                title="Blood Pressure"
+                subtitle="Have you ever been (or are you currently) being treated for high blood pressure?"
+              >
+                <CheckBoxRow
+                  label="Yes"
+                  isChecked={hasHighBP === true}
+                  onPress={() => setHasHighBP(true)}
+                />
+                <CheckBoxRow
+                  label="No"
+                  isChecked={hasHighBP === false}
+                  onPress={() => setHasHighBP(false)}
+                />
+              </Section>
+
               {/* Allergies */}
               <Section
                 title="Allergies & Sensitivities"
@@ -94,116 +178,31 @@ export default function SignUpMedicalHistoryScreen() {
                 <CheckBoxRow
                   label="None"
                   isChecked={allergies.includes('none')}
-                  onPress={() =>
-                    toggleSelection(allergies, setAllergies, 'none')
-                  }
+                  onPress={() => toggleAllergy('none')}
                 />
                 <CheckBoxRow
                   label="Food (optional - e.g. peanuts, seafood)"
                   isChecked={allergies.includes('food')}
-                  onPress={() =>
-                    toggleSelection(allergies, setAllergies, 'food')
-                  }
+                  onPress={() => toggleAllergy('food')}
                 />
                 <CheckBoxRow
                   label="Medication"
                   isChecked={allergies.includes('medication')}
-                  onPress={() =>
-                    toggleSelection(allergies, setAllergies, 'medication')
-                  }
+                  onPress={() => toggleAllergy('medication')}
                 />
                 <CheckBoxRow
                   label="Other"
                   isChecked={allergies.includes('other')}
-                  onPress={() =>
-                    toggleSelection(allergies, setAllergies, 'other')
-                  }
+                  onPress={() => toggleAllergy('other')}
                 />
-                <TextInput
-                  className="mt-2 rounded-lg border border-gray-200 p-2 font-qu-semibold text-sm"
-                  placeholder="Optional text"
-                />
-              </Section>
-
-              {/* Current Medical Treatment */}
-              <Section
-                title="Current Medical Treatment"
-                subtitle="Are you currently being treated or monitored for any condition?"
-              >
-                <CheckBoxRow
-                  label="No"
-                  isChecked={medicalConditions.includes('no')}
-                  onPress={() =>
-                    toggleSelection(
-                      medicalConditions,
-                      setMedicalConditions,
-                      'no',
-                    )
-                  }
-                />
-                <CheckBoxRow
-                  label="High blood pressure"
-                  isChecked={medicalConditions.includes('hbp')}
-                  onPress={() =>
-                    toggleSelection(
-                      medicalConditions,
-                      setMedicalConditions,
-                      'hbp',
-                    )
-                  }
-                />
-                <CheckBoxRow
-                  label="Heart related condition"
-                  isChecked={medicalConditions.includes('heart')}
-                  onPress={() =>
-                    toggleSelection(
-                      medicalConditions,
-                      setMedicalConditions,
-                      'heart',
-                    )
-                  }
-                />
-                <CheckBoxRow
-                  label="Diabetes"
-                  isChecked={medicalConditions.includes('diabetes')}
-                  onPress={() =>
-                    toggleSelection(
-                      medicalConditions,
-                      setMedicalConditions,
-                      'diabetes',
-                    )
-                  }
-                />
-                <CheckBoxRow
-                  label="Other (optional)"
-                  isChecked={medicalConditions.includes('other')}
-                  onPress={() =>
-                    toggleSelection(
-                      medicalConditions,
-                      setMedicalConditions,
-                      'other',
-                    )
-                  }
-                />
-                <TextInput
-                  className="mt-2 rounded-lg border border-gray-200 p-2 font-qu-semibold text-sm"
-                  placeholder="Optional text"
-                />
-
-                <View className="mt-2 flex-row gap-2 rounded-lg bg-gray-50 p-3">
-                  <Info size={16} color="#6B7280" className="mt-0.5" />
-                  <View className="flex-1">
-                    <Text className="mb-1 font-qu-semibold text-xs text-gray-500">
-                      Bubu will use this to:
-                    </Text>
-                    <Text className="text-xs text-gray-500">
-                      • Avoid overly intense activity suggestions
-                    </Text>
-                    <Text className="text-xs text-gray-500">
-                      • Use gentler guidance if you may be at higher risk
-                    </Text>
-                  </View>
-                </View>
+                {allergies.includes('other') && (
+                  <TextInput
+                    className="mt-2 rounded-lg border border-gray-200 p-2 font-qu-semibold text-sm"
+                    placeholder="Please specify"
+                    value={otherAllergy}
+                    onChangeText={setOtherAllergy}
+                  />
+                )}
               </Section>
 
               {/* Medications */}
@@ -211,10 +210,28 @@ export default function SignUpMedicalHistoryScreen() {
                 title="Medications (Optional)"
                 subtitle="Are you taking any medications regularly?"
               >
+                <View className="absolute right-0 top-0 z-50">
+                  <Pressable
+                    onPress={() => setShowMedicationInfo(!showMedicationInfo)}
+                  >
+                    <Info size={20} color="#6B7280" />
+                  </Pressable>
+                  {showMedicationInfo && (
+                    <View className="absolute right-0 top-6 z-50 w-60 rounded-lg border border-gray-200 bg-gray-50 p-3 shadow-sm">
+                      <Text className="font-qu-regular text-xs text-neutral-black-500">
+                        No dosage needed.{'\n'}
+                        This is only to avoid conflicting suggestions
+                      </Text>
+                    </View>
+                  )}
+                </View>
                 <CheckBoxRow
                   label="No"
                   isChecked={hasMedications === false}
-                  onPress={() => setHasMedications(false)}
+                  onPress={() => {
+                    setHasMedications(false);
+                    setMedicationName('');
+                  }}
                 />
                 <CheckBoxRow
                   label="Yes (optional: medication name)"
@@ -225,15 +242,10 @@ export default function SignUpMedicalHistoryScreen() {
                   className="mt-2 rounded-lg border border-gray-200 p-2 font-qu-semibold text-sm"
                   placeholder=""
                   editable={hasMedications === true}
+                  value={medicationName}
+                  onChangeText={setMedicationName}
+                  style={{ opacity: hasMedications === true ? 1 : 0.5 }}
                 />
-
-                <View className="mt-2 flex-row gap-2">
-                  <Info size={16} color="#6B7280" />
-                  <Text className="flex-1 text-xs text-gray-500">
-                    No dosage needed. {'\n'}This is only to avoid conflicting
-                    suggestions.
-                  </Text>
-                </View>
               </Section>
 
               {/* Physical Limitations */}
@@ -241,68 +253,78 @@ export default function SignUpMedicalHistoryScreen() {
                 title="Physical Limitations or Injuries"
                 subtitle="Do you have any physical limitations or recent injuries?"
               >
+                <View className="absolute right-0 top-0 z-50">
+                  <Pressable
+                    onPress={() => setShowLimitationInfo(!showLimitationInfo)}
+                  >
+                    <Info size={20} color="#6B7280" />
+                  </Pressable>
+                  {showLimitationInfo && (
+                    <View className="absolute right-0 top-6 z-50 w-60 rounded-lg border border-gray-200 bg-gray-50 p-3 shadow-sm">
+                      <Text className="mb-1 font-qu-semibold text-xs text-neutral-black-500">
+                        BuBu will use this to:
+                      </Text>
+                      <Text className="font-qu-regular text-xs text-neutral-black-500">
+                        • Avoid overly intense activity suggestions
+                      </Text>
+                      <Text className="font-qu-regular text-xs text-neutral-black-500">
+                        • Use gentler guidance if you may be at higher risk
+                      </Text>
+                    </View>
+                  )}
+                </View>
                 <CheckBoxRow
                   label="No"
                   isChecked={limitations.includes('no')}
-                  onPress={() =>
-                    toggleSelection(limitations, setLimitations, 'no')
-                  }
+                  onPress={() => toggleLimitation('no')}
                 />
                 <CheckBoxRow
                   label="Back or neck pain"
                   isChecked={limitations.includes('back')}
-                  onPress={() =>
-                    toggleSelection(limitations, setLimitations, 'back')
-                  }
+                  onPress={() => toggleLimitation('back')}
                 />
                 <CheckBoxRow
                   label="Knee or leg issues"
                   isChecked={limitations.includes('knee')}
-                  onPress={() =>
-                    toggleSelection(limitations, setLimitations, 'knee')
-                  }
+                  onPress={() => toggleLimitation('knee')}
                 />
                 <CheckBoxRow
                   label="Recent injury"
                   isChecked={limitations.includes('injury')}
-                  onPress={() =>
-                    toggleSelection(limitations, setLimitations, 'injury')
-                  }
+                  onPress={() => toggleLimitation('injury')}
                 />
                 <CheckBoxRow
                   label="Other"
                   isChecked={limitations.includes('other')}
-                  onPress={() =>
-                    toggleSelection(limitations, setLimitations, 'other')
-                  }
+                  onPress={() => toggleLimitation('other')}
                 />
-                <TextInput
-                  className="mt-2 rounded-lg border border-gray-200 p-2 font-qu-semibold text-sm"
-                  placeholder=""
-                />
-
-                <View className="mt-2 flex-row gap-2">
-                  <Info size={16} color="#6B7280" />
-                  <Text className="flex-1 text-xs text-gray-500">
-                    Especially important for exercise and movement
-                    recommendations.
-                  </Text>
-                </View>
+                {limitations.includes('other') && (
+                  <TextInput
+                    className="mt-2 rounded-lg border border-gray-200 p-2 font-qu-semibold text-sm"
+                    placeholder="Please specify"
+                    value={otherLimitation}
+                    onChangeText={setOtherLimitation}
+                  />
+                )}
               </Section>
 
               {/* Emergency Awareness */}
               <Section
                 title="Emergency Awareness"
                 subtitle="When should you seek medical help?"
+                required
               >
-                <Text className="mb-2 font-qu-semibold text-sm text-gray-600">
+                <Text className="mb-2 text-center text-sm text-gray-600">
+                  Always remember
+                  {'\n'}
                   Bubu does not replace{' '}
-                  <Text className="text-primary-500">a doctor.</Text>
+                  <Text className="text-primary-500 underline">a doctor</Text>
                 </Text>
-                <Text className="mb-2 text-sm text-gray-600">
+                <Text className="mb-4 text-sm text-gray-600">
                   If you experience serious symptoms (such as chest pain or
-                  prolonged dizziness). Please seek medical assistance
-                  immediately.
+                  prolonged dizziness)
+                  {'\n'}
+                  Please seek medical assistance immediately.
                 </Text>
                 <CheckBoxRow
                   label="I understand"
@@ -313,11 +335,11 @@ export default function SignUpMedicalHistoryScreen() {
                 />
               </Section>
 
-              {/* AI Consent */}
-              <Section title="AI Personalization Consent">
-                <Text className="mb-2 text-sm text-gray-600">
-                  Bubu uses this information only to personalize suggestions,
-                  not for diagnosis.
+              {/* AI Personalization Consent */}
+              <Section title="AI Personalization Consent" required>
+                <Text className="mb-4 text-sm text-gray-600">
+                  Please keep your information up to date to ensure accurate AI
+                  suggestions.
                 </Text>
                 <CheckBoxRow
                   label="I understand"
@@ -325,29 +347,12 @@ export default function SignUpMedicalHistoryScreen() {
                   onPress={() => setConsents({ ...consents, ai: !consents.ai })}
                 />
               </Section>
-
-              {/* Accuracy Consent */}
-              <Section title="AI Personalization Consent">
-                <Text className="mb-2 text-sm text-gray-600">
-                  Please keep your information up to date to ensure accurate AI
-                  suggestions.
-                </Text>
-                <CheckBoxRow
-                  label="I understand"
-                  isChecked={consents.accuracy}
-                  onPress={() =>
-                    setConsents({ ...consents, accuracy: !consents.accuracy })
-                  }
-                />
-              </Section>
             </View>
 
             {/* Footer */}
             <View className="pb-8 pt-4">
               <Button
-                disabled={
-                  !consents.emergency || !consents.ai || !consents.accuracy
-                } // Simple validation
+                disabled={!isNextEnabled}
                 className="w-full rounded-3xl bg-primary-500"
                 onPress={() => router.push('/sign-up/intensity' as any)}
               >
@@ -370,15 +375,20 @@ const Section = ({
   title,
   subtitle,
   children,
+  required,
 }: {
   title: string;
   subtitle?: string;
   children: React.ReactNode;
+  required?: boolean;
 }) => (
-  <View className="mb-6">
-    <Text className="mb-1 font-qu-bold text-lg text-neutral-black-500">
-      {title}
-    </Text>
+  <View className="relative mb-6">
+    <View className="mb-1 flex-row items-center justify-between">
+      <Text className="font-qu-bold text-lg text-neutral-black-500">
+        {title}
+      </Text>
+      {required && <Text className="text-xl text-neutral-black-500">*</Text>}
+    </View>
     {subtitle && (
       <Text className="mb-3 font-qu-semibold text-sm text-neutral-black-500">
         {subtitle}
