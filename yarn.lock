@@ -1641,6 +1641,12 @@
   version "2.11.4"
   resolved "https://registry.yarnpkg.com/@react-native-picker/picker/-/picker-2.11.4.tgz#7fb09506ee00a82989125cc03e8495204c8afc01"
   integrity sha512-Kf8h1AMnBo54b1fdiVylP2P/iFcZqzpMYcglC28EEFB1DEnOjsNr6Ucqc+3R9e91vHxEDnhZFbYDmAe79P2gjA==
+"@react-native-community/datetimepicker@^8.6.0":
+  version "8.6.0"
+  resolved "https://registry.yarnpkg.com/@react-native-community/datetimepicker/-/datetimepicker-8.6.0.tgz#1c4318a8bc1d5bfd111d782a87cf0b729f718e79"
+  integrity sha512-yxPSqNfxgpGaqHQIpatqe6ykeBdU/1pdsk/G3x01mY2bpTflLpmVTLqFSJYd3MiZzxNZcMs/j1dQakUczSjcYA==
+  dependencies:
+    invariant "^2.2.4"
 
 "@react-native/assets-registry@0.81.5":
   version "0.81.5"
@@ -3924,6 +3930,11 @@ expo-asset@~12.0.12:
   dependencies:
     "@expo/image-utils" "^0.8.8"
     expo-constants "~18.0.12"
+
+expo-checkbox@^5.0.8:
+  version "5.0.8"
+  resolved "https://registry.yarnpkg.com/expo-checkbox/-/expo-checkbox-5.0.8.tgz#b0b6c783fdfb4ff911cd0f23cc307c5cca33987a"
+  integrity sha512-QDMxNXZu5WBTwRM9oPd2EnTiF9iLvwff3t0q6mQr955BR2N9mn1py7xnuYiRHKBzmYySqZH7/S4QQqWOWX4LTw==
 
 expo-constants@~18.0.12, expo-constants@~18.0.13:
   version "18.0.13"
