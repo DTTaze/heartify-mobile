@@ -9,6 +9,10 @@ dist/
 web-build/
 expo-env.d.ts
 
+# JetBrains
+.idea/
+*.iml
+
 # Native
 .kotlin/
 *.orig.*
