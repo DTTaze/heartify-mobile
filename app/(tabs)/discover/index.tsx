@@ -1,11 +1,11 @@
 import BookIcon from '@/components/icons/BookIcon';
 // import Button from '@/components/ui/Button';
+import { Button } from '@/components/ui/Button';
 import React, { useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 import SegmentTab from './components/SegmentTab';
 import RecipesSegment from './recipes/RecipesSegment';
 import SportsSegment from './sports/SportsSegment';
-import { Button } from '@/components/ui/Button';
 
 const Discover = () => {
   const [activeTab, setActiveTab] = useState('Recipes');
@@ -16,7 +16,7 @@ const Discover = () => {
         <View className="flex-col gap-6 bg-white p-4">
           <View className="flex gap-3">
             <Text className="text-center font-qu-bold text-h2 text-primary-700">
-              Discover
+              Discover Your Health Journey
             </Text>
             <Text className="font-qu-semibold text-base">
               Discover a curated collection of recipes, workouts, and lifestyle
@@ -27,15 +27,9 @@ const Discover = () => {
               </Text>
             </Text>
             <View className="flex items-end">
-              {/* <Button
-                title="Library"
-                className="h-7 rounded-md border border-primary-500 bg-white p-0 px-3"
-                textClassName="text-primary-600 font-qu-semibold text-base"
-                prefix={<BookIcon color="#4892D3" size={16} />}
-              /> */}
-              <Button className="h-7 flex-row items-center rounded-md border border-primary-500 bg-white p-0 px-3">
+              <Button className="h-7 flex-row items-center gap-1 rounded-md border border-primary-500 bg-white p-0 px-3">
                 <BookIcon color="#4892D3" size={16} />
-                <Text className="ml-2 font-qu-semibold text-base text-primary-600">
+                <Text className="font-qu-semibold text-base text-primary-600">
                   Library
                 </Text>
               </Button>

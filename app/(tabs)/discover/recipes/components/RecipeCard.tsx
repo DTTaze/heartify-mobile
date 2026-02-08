@@ -1,5 +1,6 @@
 import { Bookmark, Clock, Cook, Serve } from '@/assets/icons';
 import { Icon } from '@/components/icons/Icon';
+import { useRouter } from 'expo-router';
 import { Heart } from 'lucide-react-native';
 import React from 'react';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
@@ -15,6 +16,7 @@ export interface RecipeCardProps {
 }
 
 const RecipeCard = ({
+  id,
   description,
   difficulty,
   imageUrl,
@@ -22,15 +24,24 @@ const RecipeCard = ({
   prepTime,
   serves,
 }: RecipeCardProps) => {
+  const router = useRouter();
+
+  const handlePress = () => {
+    router.push(`/discover/recipes/${id}`);
+  };
+
   return (
-    <View className="rounded-lg border border-sky-200 bg-white p-4 shadow-sm">
-      {/* Title & Description */}
+    <TouchableOpacity
+      activeOpacity={0.9}
+      onPress={handlePress}
+      className="rounded-lg border border-sky-200 bg-white p-4 shadow-sm"
+    >
       <Text className="mb-2 font-qu-bold text-xl text-primary-800">{name}</Text>
+
       <Text className="mb-4 font-qu-semibold text-sm text-black">
         {description}
       </Text>
 
-      {/* Main Info Row (Image + Details) */}
       <View className="mb-6 flex-row">
         <Image
           source={imageUrl}
@@ -62,11 +73,11 @@ const RecipeCard = ({
         </View>
       </View>
 
-      {/* Action Row (Recommend & Bookmark) */}
       <View className="flex-row items-center justify-between">
         <TouchableOpacity
-          className="flex-row items-center rounded-lg bg-primary-300 px-4 py-2"
           activeOpacity={0.8}
+          className="flex-row items-center rounded-lg bg-primary-300 px-4 py-2"
+          onPress={(e) => e.stopPropagation()}
         >
           <Heart color="#fff" size={20} />
           <Text className="ml-2 font-qu-semibold text-white">
@@ -74,11 +85,11 @@ const RecipeCard = ({
           </Text>
         </TouchableOpacity>
 
-        <TouchableOpacity>
+        <TouchableOpacity onPress={(e) => e.stopPropagation()}>
           <Icon icon={Bookmark} size={32} />
         </TouchableOpacity>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

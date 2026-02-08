@@ -16,7 +16,7 @@ const categories = [
 
 export const FAKE_DATA: RecipeCardProps[] = [
   {
-    id: '1',
+    id: 'ffffdf87c9f04e5430b5d40e75fd6dc32f2be16bbfc6286a22092a446e52d3eb',
     name: 'Pan-Seared Chicken & Nut Salad',
     description:
       'This dish combines lean protein and heart-healthy fats to support cardiovascular health.',
@@ -26,7 +26,7 @@ export const FAKE_DATA: RecipeCardProps[] = [
     difficulty: 'Quick & simple',
   },
   {
-    id: '2',
+    id: 'fffe05dac9a7cdff4ead0fa21cc51c213e1f9a273a41853b8decb1fd44d8c033',
     name: 'Grilled Salmon with Asparagus',
     description:
       'Fresh Atlantic salmon grilled to perfection with a side of crispy seasoned asparagus.',
@@ -36,7 +36,7 @@ export const FAKE_DATA: RecipeCardProps[] = [
     difficulty: 'Intermediate',
   },
   {
-    id: '3',
+    id: 'fff36296cc62e0bff6da4a85687bbc71f86ceae2bfc146c277d818e1107a196d',
     name: 'Classic Beef Burger',
     description:
       'Juicy beef patty with melted cheddar, fresh lettuce, and our secret house sauce.',
@@ -46,7 +46,7 @@ export const FAKE_DATA: RecipeCardProps[] = [
     difficulty: 'Easy',
   },
   {
-    id: '4',
+    id: 'fff30cd8f1b44d39947749032ea09fefdc002fbace0f37c5531f423685675fa5',
     name: 'Vegan Buddha Bowl',
     description:
       'A colorful mix of quinoa, roasted chickpeas, avocado, and tahini dressing.',
