@@ -33,7 +33,9 @@ export default function HealthRecordCard({ item }: { item: HealthRecord }) {
         <View className="gap-1 px-4 py-2">
           {[
             `BMI: ${item.bmi}`,
-            `Heart Rate: ${item.heartRate}`,
+            // `Heart Rate: ${item.heartRate}`,
+
+            `impact factor: ${Number(item.riskPercentage) * 100}%`,
             `Blood Pressure: ${item.bloodPressure}`,
           ].map((text) => (
             <View key={text}>

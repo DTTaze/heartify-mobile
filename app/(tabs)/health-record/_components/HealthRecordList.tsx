@@ -1,65 +1,143 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { FlatList, Pressable, Text, View } from 'react-native';
 import ArrowCircleLeftIcon from '@/components/icons/ArrowCircleLeftIcon';
 import ArrowCircleRightIcon from '@/components/icons/ArrowCircleRightIcon';
 import SortAndFilterBar, { SortType } from './SortAndFilterBar';
 import RiskColorFilter from './RiskColorFilter';
 import HealthRecordCard from './HealthRecordCard';
+import { api } from '@/src/services/api.instance';
 import {
   HealthRecord,
   HealthRiskLevel,
 } from '@/app/(tabs)/health-record/types/health';
-
+import { HealthRecordApi } from '@/src/api/healthRecord.api';
 const PAGE_SIZE = 4;
-
-const DATA: HealthRecord[] = [
-  {
-    id: '4',
-    date: 'October 08, 2025',
-    bmi: '75/80 kg/m²',
-    heartRate: '75 bpm',
-    bloodPressure: '115/75 mmHg',
-    location: 'Hospital visit',
-    risk: 'low',
-  },
-  {
-    id: '3',
-    date: 'October 12, 2025',
-    bmi: '75/80 kg/m²',
-    heartRate: '75 bpm',
-    bloodPressure: '115/75 mmHg',
-    location: 'Home',
-    risk: 'borderline',
-  },
-  {
-    id: '2',
-    date: 'October 12, 2025',
-    bmi: '75/80 kg/m²',
-    heartRate: '75 bpm',
-    bloodPressure: '115/75 mmHg',
-    location: 'Home',
-    risk: 'moderate',
-  },
-  {
-    id: '1',
-    date: 'October 12, 2025',
-    bmi: '75/80 kg/m²',
-    heartRate: '75 bpm',
-    bloodPressure: '115/75 mmHg',
-    location: 'General check-up',
-    risk: 'high',
-  },
-];
+// const DATA: HealthRecord[] = [
+//   {
+//     id: '4',
+//     date: 'October 08, 2025',
+//     bmi: '75/80 kg/m²',
+//     // heartRate: '75 bpm',
+//     riskPercentage: '12',
+//     bloodPressure: '115/75 mmHg',
+//     location: 'Hospital visit',
+//     risk: 'low',
+//   },
+//   {
+//     id: '3',
+//     date: 'October 12, 2025',
+//     bmi: '75/80 kg/m²',
+//     // heartRate: '75 bpm',
+//     riskPercentage: '12',
+//     bloodPressure: '115/75 mmHg',
+//     location: 'Home',
+//     risk: 'borderline',
+//   },
+//   {
+//     id: '2',
+//     date: 'October 12, 2025',
+//     bmi: '75/80 kg/m²',
+//     // heartRate: '75 bpm',
+//     riskPercentage: '12',
+//     bloodPressure: '115/75 mmHg',
+//     location: 'Home',
+//     risk: 'moderate',
+//   },
+//   {
+//     id: '1',
+//     date: 'October 12, 2025',
+//     bmi: '75/80 kg/m²',
+//     // heartRate: '75 bpm',
+//     riskPercentage: '12',
+//     bloodPressure: '115/75 mmHg',
+//     location: 'General check-up',
+//     risk: 'high',
+//   },
+// ];
 
 export default function HealthRecordList() {
   const [riskFilter, setRiskFilter] = useState<HealthRiskLevel | 'all'>('all');
   const [page, setPage] = useState(1);
   const [sort, setSort] = useState<SortType>('latest');
+  const [records, setRecords] = useState<HealthRecord[]>([]);
+  // const [loading, setLoading] = useState(false);
+
+  const fetchRecords = async () => {
+    try {
+      // setLoading(true);
+      const response = await HealthRecordApi.getRecords({
+        offset: 0,
+        limit: PAGE_SIZE,
+      });
+
+      if (response.ok && response.data && response.data.data) {
+        const rows = response.data.data.rows ?? [];
+        const mapped: HealthRecord[] = rows.map((item: any) => ({
+          id: item.id,
+          date: item.recordedAt,
+          bmi: item.measurements?.bmi?.toString() ?? '',
+          riskPercentage: item.riskPercentage,
+          bloodPressure: `${item.systolicBp}/${item.diastolicBp}`,
+          location: '',
+          risk: item.riskLevel,
+
+          createdAt: item.createdAt,
+          updatedAt: item.updatedAt,
+          userId: item.userId,
+          recordedAt: item.recordedAt,
+
+          ageAtRecord: item.ageAtRecord,
+
+          systolicBp: item.systolicBp,
+          diastolicBp: item.diastolicBp,
+
+          totalCholesterol: item.totalCholesterol,
+          hdlCholesterol: item.hdlCholesterol,
+
+          isSmoker: item.isSmoker,
+          isDiabetic: item.isDiabetic,
+          isTreatedHypertension: item.isTreatedHypertension,
+
+          measurements: {
+            bmi: Number(item.measurements?.bmi ?? 0),
+            height: {
+              unit: item.measurements?.height?.unit ?? '',
+              value: Number(item.measurements?.height?.value ?? 0),
+            },
+            weight: {
+              unit: item.measurements?.weight?.unit ?? '',
+              value: Number(item.measurements?.weight?.value ?? 0),
+            },
+          },
+
+          riskLevel: item.riskLevel,
+          riskScore: item.riskScore,
+          riskAlgorithm: item.riskAlgorithm,
+
+          identifiedRiskFactors: item.identifiedRiskFactors,
+        }));
+
+        setRecords(mapped);
+        console.log('Health Records:', mapped);
+      }
+    } catch (error) {
+      console.error('Failed to fetch health records', error);
+    } finally {
+      // setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    api.setAuthToken(
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIyYjVkZTc5LTVmMzAtNDUzMi05MTA2LTAwNzVlNjkyYWYwNCIsImlhdCI6MTc3MDUzMjg2NiwiZXhwIjoxODAyMDY4ODY2fQ.zOqrrUiFMqXOtlqZujIAuplAGmVZPANRJk_eJFCZUbU',
+    );
+    fetchRecords();
+  }, []);
 
   const filteredData = useMemo(() => {
-    if (riskFilter === 'all') return DATA;
-    return DATA.filter((i) => i.risk === riskFilter);
-  }, [riskFilter]);
+    if (riskFilter === 'all') return records;
+    return records.filter((i) => i.risk === riskFilter);
+  }, [riskFilter, records]);
 
   const totalPages = Math.max(1, Math.ceil(filteredData.length / PAGE_SIZE));
 
