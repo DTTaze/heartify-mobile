@@ -11,49 +11,7 @@ import {
   HealthRiskLevel,
 } from '@/app/(tabs)/health-record/types/health';
 import { HealthRecordApi } from '@/src/api/healthRecord.api';
-const PAGE_SIZE = 4;
-// const DATA: HealthRecord[] = [
-//   {
-//     id: '4',
-//     date: 'October 08, 2025',
-//     bmi: '75/80 kg/m²',
-//     // heartRate: '75 bpm',
-//     riskPercentage: '12',
-//     bloodPressure: '115/75 mmHg',
-//     location: 'Hospital visit',
-//     risk: 'low',
-//   },
-//   {
-//     id: '3',
-//     date: 'October 12, 2025',
-//     bmi: '75/80 kg/m²',
-//     // heartRate: '75 bpm',
-//     riskPercentage: '12',
-//     bloodPressure: '115/75 mmHg',
-//     location: 'Home',
-//     risk: 'borderline',
-//   },
-//   {
-//     id: '2',
-//     date: 'October 12, 2025',
-//     bmi: '75/80 kg/m²',
-//     // heartRate: '75 bpm',
-//     riskPercentage: '12',
-//     bloodPressure: '115/75 mmHg',
-//     location: 'Home',
-//     risk: 'moderate',
-//   },
-//   {
-//     id: '1',
-//     date: 'October 12, 2025',
-//     bmi: '75/80 kg/m²',
-//     // heartRate: '75 bpm',
-//     riskPercentage: '12',
-//     bloodPressure: '115/75 mmHg',
-//     location: 'General check-up',
-//     risk: 'high',
-//   },
-// ];
+const PAGE_SIZE = 50;
 
 export default function HealthRecordList() {
   const [riskFilter, setRiskFilter] = useState<HealthRiskLevel | 'all'>('all');
@@ -118,7 +76,6 @@ export default function HealthRecordList() {
         }));
 
         setRecords(mapped);
-        console.log('Health Records:', mapped);
       }
     } catch (error) {
       console.error('Failed to fetch health records', error);
