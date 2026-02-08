@@ -68,7 +68,7 @@ export default function SignUpWelcomeScreen() {
           <Button
             disabled={!isChecked}
             className="w-full rounded-3xl bg-primary-500"
-            onPress={() => router.push('/sign-up/name')}
+            onPress={() => router.push('/sign-up/email' as any)}
           >
             <Text className="font-qu-semibold text-base text-white">
               Create new account

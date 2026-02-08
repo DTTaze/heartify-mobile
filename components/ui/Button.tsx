@@ -20,7 +20,7 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: 'bg-primary active:bg-primary-700 disabled:bg-neutral-100',
+        default: 'bg-primary active:bg-primary-700 disabled:bg-primary-500/30',
         destructive: 'bg-danger active:bg-danger-700 disabled:bg-neutral-100',
         outline:
           'active:bg-accent rounded-lg border border-primary-300 bg-transparent active:border-neutral-700 disabled:border-neutral-100',

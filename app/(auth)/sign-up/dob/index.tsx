@@ -91,7 +91,8 @@ export default function SignUpDobScreen() {
           <Button
             className="w-full rounded-3xl bg-primary-500 font-qu-semibold text-base text-white"
             onPress={() => {
-              console.log('Next step with DOB:', date);
+              // console.log('Next step with DOB:', date);
+              router.push('/sign-up/gender' as any);
             }}
           >
             <View className="flex-row items-center space-x-2">

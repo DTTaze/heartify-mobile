@@ -1,9 +1,8 @@
 import { cn } from '@/app/lib/cn';
-import { Text, TextInput, View } from 'react-native';
+import { Text, TextInput, View, TextInputProps } from 'react-native';
 
-type InputProps = {
+type InputProps = TextInputProps & {
   label?: string;
-  placeholder?: string;
 
   containerClassName?: string;
   labelClassName?: string;
@@ -12,10 +11,10 @@ type InputProps = {
 
 export default function Input({
   label,
-  placeholder,
   containerClassName,
   labelClassName,
   inputClassName,
+  ...props
 }: InputProps) {
   return (
     <View className={cn('mb-4', containerClassName)}>
@@ -26,12 +25,12 @@ export default function Input({
       )}
 
       <TextInput
-        placeholder={placeholder}
+        placeholderTextColor="#9CA3AF"
         className={cn(
           'rounded-xl border border-gray-300 px-4 py-3 text-base text-neutral-black-500',
           inputClassName,
         )}
-        placeholderTextColor="#9CA3AF"
+        {...props}
       />
     </View>
   );
