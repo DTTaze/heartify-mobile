@@ -6,18 +6,30 @@ import {
   Platform,
   ScrollView,
   TextInput,
+  Alert,
+  ActivityIndicator,
 } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ChevronLeft, KeyRound, X } from 'lucide-react-native';
 import { useState, useRef } from 'react';
 
 import { Button } from '@/components/ui/Button';
+import { authApi } from '@/src/api/auth.api';
+import { useSignUp } from '../context';
+import { useAuth } from '@/src/context/auth';
 
 export default function SignUpVerifyEmailScreen() {
   const router = useRouter();
-  const [code, setCode] = useState(['', '', '', '']);
+  const { email } = useLocalSearchParams<{ email: string }>();
+  const [code, setCode] = useState(['', '', '', '', '', '']);
   const [isError, setIsError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isResending, setIsResending] = useState(false);
+  const isSubmittingRef = useRef(false);
+
+  const { data } = useSignUp();
+  const { signIn } = useAuth();
 
   const inputRefs = useRef<(TextInput | null)[]>([]);
 
@@ -26,7 +38,7 @@ export default function SignUpVerifyEmailScreen() {
     newCode[index] = text;
     setCode(newCode);
 
-    if (text.length === 1 && index < 3) {
+    if (text.length === 1 && index < 5) {
       inputRefs.current[index + 1]?.focus();
     }
 
@@ -40,15 +52,99 @@ export default function SignUpVerifyEmailScreen() {
     }
   };
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     const fullCode = code.join('');
-    if (fullCode.length < 4) return;
+    if (fullCode.length < 6) return;
 
-    // Mock validation
-    if (fullCode === '1234') {
-      router.push('/sign-up/create-password');
-    } else {
-      setIsError(true);
+    if (isSubmittingRef.current || isLoading) return;
+    isSubmittingRef.current = true;
+    setIsLoading(true);
+
+    try {
+      if (!email) {
+        Alert.alert('Error', 'Email not found');
+        return;
+      }
+
+      const response = await authApi.verifyOtp({
+        usernameOrEmail: email,
+        code: fullCode,
+        action: 'register',
+      });
+
+      if (response.ok && response.data?.success) {
+        // Auto-login logic
+        if (data.email && data.password) {
+          try {
+            const loginResponse = await authApi.login({
+              usernameOrEmail: data.email,
+              password: data.password,
+            });
+
+            if (
+              loginResponse.ok &&
+              loginResponse.data &&
+              loginResponse.data.data.accessToken
+            ) {
+              await signIn(loginResponse.data.data.accessToken);
+              // Navigate to the first step of profile setup
+              router.replace('/(auth)/sign-up/name' as any);
+              return;
+            }
+          } catch (loginError) {
+            console.log('Auto-login failed', loginError);
+            // Fallback if auto-login fails, maybe go to login screen or success screen
+            router.replace('/(auth)/log-in');
+          }
+        }
+
+        // If no credentials in context (edge case), go to success or login
+        router.push('/sign-up/success');
+      } else {
+        setIsError(true);
+        const errorData = response.data as any;
+        const message =
+          errorData?.message ||
+          response.problem ||
+          'Verification failed. Please check the code and try again.';
+        Alert.alert('Verification Failed', message);
+      }
+    } catch (error) {
+      console.error('Verification error:', error);
+      Alert.alert('Error', 'An unexpected error occurred. Please try again.');
+    } finally {
+      setIsLoading(false);
+      isSubmittingRef.current = false;
+    }
+  };
+
+  const handleResendCode = async () => {
+    if (isResending) return;
+    setIsResending(true);
+    try {
+      if (!email) {
+        Alert.alert('Error', 'Email not found');
+        return;
+      }
+
+      const response = await authApi.resendEmail(email);
+
+      if (response.ok && response.data?.success) {
+        Alert.alert(
+          'Success',
+          'Verification code has been resent to your email.',
+        );
+      } else {
+        const errorData = response.data as any;
+        const message =
+          errorData?.message || response.problem || 'Failed to resend email.';
+        Alert.alert('Error', message);
+      }
+    } catch (error) {
+      console.error('Resend error:', error);
+      Alert.alert('Error', 'An unexpected error occurred. Please try again.');
+    } finally {
+      setIsResending(false);
     }
   };
 
@@ -98,7 +194,7 @@ export default function SignUpVerifyEmailScreen() {
                     ref={(ref) => {
                       inputRefs.current[index] = ref;
                     }}
-                    className="h-14 w-14 rounded-xl border border-neutral-black-500 text-center font-qu-bold text-xl text-neutral-black-500"
+                    className="h-14 w-12 rounded-xl border border-neutral-black-500 text-center font-qu-bold text-xl text-neutral-black-500"
                     maxLength={1}
                     keyboardType="number-pad"
                     value={digit}
@@ -112,9 +208,9 @@ export default function SignUpVerifyEmailScreen() {
                 ))}
               </View>
 
-              <Pressable onPress={() => console.log('Resend code')}>
+              <Pressable onPress={handleResendCode} disabled={isResending}>
                 <Text className="mt-3 font-qu-semibold text-sm text-neutral-black-500">
-                  Send again
+                  {isResending ? 'Sending...' : 'Send again'}
                 </Text>
               </Pressable>
 
@@ -133,12 +229,20 @@ export default function SignUpVerifyEmailScreen() {
             {/* Footer */}
             <View className="pb-8 pt-4">
               <Button
-                className="w-full rounded-3xl bg-primary-500"
+                className="w-full flex-row items-center justify-center rounded-3xl bg-primary-500"
                 onPress={handleConfirm}
+                disabled={isLoading}
               >
                 <Text className="font-qu-bold text-base text-white">
-                  Confirm
+                  {isLoading ? 'Verifying...' : 'Confirm'}
                 </Text>
+                {isLoading && (
+                  <ActivityIndicator
+                    size="small"
+                    color="white"
+                    className="ml-2"
+                  />
+                )}
               </Button>
             </View>
           </View>

@@ -11,19 +11,43 @@ import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ChevronLeft, ArrowRight, Weight, Ruler } from 'lucide-react-native';
 import { useState } from 'react';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils'; // Assuming this is present
 
 import { Button } from '@/components/ui/Button';
 import { Progress } from '@/components/ui/progress';
+import { useSignUp } from '../context';
 
 export default function SignUpMeasurementsScreen() {
   const router = useRouter();
+  const { data, updateData } = useSignUp();
 
-  const [weight, setWeight] = useState('');
-  const [weightUnit, setWeightUnit] = useState<'kg' | 'lb'>('kg');
+  const [weight, setWeight] = useState(data.weightVal || '');
+  const [weightUnit, setWeightUnit] = useState<'kg' | 'lb'>(
+    data.weightUnit || 'kg',
+  );
 
-  const [height, setHeight] = useState('');
-  const [heightUnit, setHeightUnit] = useState<'cm' | 'ft'>('cm');
+  const [height, setHeight] = useState(data.heightVal || '');
+  const [heightUnit, setHeightUnit] = useState<'cm' | 'ft'>(
+    data.heightUnit || 'cm',
+  );
+
+  const handleUpdate = (updates: any) => {
+    // updates state locally
+    if (updates.weight !== undefined) setWeight(updates.weight);
+    if (updates.weightUnit !== undefined) setWeightUnit(updates.weightUnit);
+    if (updates.height !== undefined) setHeight(updates.height);
+    if (updates.heightUnit !== undefined) setHeightUnit(updates.heightUnit);
+
+    // update context
+    updateData({
+      weightVal: updates.weight !== undefined ? updates.weight : weight,
+      weightUnit:
+        updates.weightUnit !== undefined ? updates.weightUnit : weightUnit,
+      heightVal: updates.height !== undefined ? updates.height : height,
+      heightUnit:
+        updates.heightUnit !== undefined ? updates.heightUnit : heightUnit,
+    });
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -96,13 +120,13 @@ export default function SignUpMeasurementsScreen() {
                         placeholder="0"
                         keyboardType="numeric"
                         value={weight}
-                        onChangeText={setWeight}
+                        onChangeText={(text) => handleUpdate({ weight: text })}
                       />
                     </View>
 
                     <View className="w-2/3 flex-row items-center justify-start gap-3">
                       <Pressable
-                        onPress={() => setWeightUnit('kg')}
+                        onPress={() => handleUpdate({ weightUnit: 'kg' })}
                         className="flex-row items-center"
                       >
                         <View
@@ -121,7 +145,7 @@ export default function SignUpMeasurementsScreen() {
                       </Pressable>
 
                       <Pressable
-                        onPress={() => setWeightUnit('lb')}
+                        onPress={() => handleUpdate({ weightUnit: 'lb' })}
                         className="flex-row items-center"
                       >
                         <View
@@ -158,13 +182,13 @@ export default function SignUpMeasurementsScreen() {
                         placeholder="0"
                         keyboardType="numeric"
                         value={height}
-                        onChangeText={setHeight}
+                        onChangeText={(text) => handleUpdate({ height: text })}
                       />
                     </View>
 
                     <View className="w-2/3 flex-row items-center justify-start gap-3">
                       <Pressable
-                        onPress={() => setHeightUnit('cm')}
+                        onPress={() => handleUpdate({ heightUnit: 'cm' })}
                         className="flex-row items-center"
                       >
                         <View
@@ -183,7 +207,7 @@ export default function SignUpMeasurementsScreen() {
                       </Pressable>
 
                       <Pressable
-                        onPress={() => setHeightUnit('ft')}
+                        onPress={() => handleUpdate({ heightUnit: 'ft' })}
                         className="flex-row items-center"
                       >
                         <View

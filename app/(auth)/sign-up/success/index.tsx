@@ -45,7 +45,7 @@ export default function SignUpSuccessScreen() {
         <View className="w-full pb-8">
           <Button
             className="w-full rounded-3xl bg-primary-500"
-            onPress={() => router.push('/(auth)/sign-up/name')}
+            onPress={() => router.push('/(auth)/log-in')}
           >
             <Text className="font-qu-bold text-base text-white">
               Get Started

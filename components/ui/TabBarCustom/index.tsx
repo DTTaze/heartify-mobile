@@ -17,7 +17,7 @@ interface TabItem {
 // 2. Mảng dữ liệu Tabs
 const TABS: TabItem[] = [
   { name: 'index', label: 'Home', icon: Home },
-  { name: 'health-record', label: 'Health', icon: Heart },
+  { name: 'health', label: 'Health', icon: Heart },
   { name: 'record-details', label: 'Camera', icon: Camera, isSpecial: true },
   { name: 'discover', label: 'Discover', icon: Book },
   // { name: 'health-record', label: 'Records', icon: Book },

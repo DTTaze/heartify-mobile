@@ -112,7 +112,7 @@ export default function SignUpWelcomeScreen() {
             <Text className="font-qu-regular text-neutral-black-200">
               Already had account?{' '}
             </Text>
-            <Link href="/(tabs)" asChild>
+            <Link href="/(auth)/log-in" asChild>
               <Text className="font-qu-semibold text-base text-primary-600">
                 Log in
               </Text>
