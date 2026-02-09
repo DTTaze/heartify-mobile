@@ -10,29 +10,53 @@ import {
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ChevronLeft, ArrowRight, Info } from 'lucide-react-native';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Checkbox } from 'expo-checkbox';
 
 import { Button } from '@/components/ui/Button';
 import { Progress } from '@/components/ui/progress';
+import { useSignUp } from '../context';
 
 export default function SignUpMedicalHistoryScreen() {
   const router = useRouter();
+  const { data, updateData } = useSignUp();
 
   // State for form fields
-  const [isSmoker, setIsSmoker] = useState<boolean | null>(null);
-  const [hasDiabetes, setHasDiabetes] = useState<boolean | null>(null);
-  const [hasHighBP, setHasHighBP] = useState<boolean | null>(null);
+  const [isSmoker, setIsSmoker] = useState<boolean | null>(
+    data.isSmoker ?? null,
+  );
+  const [hasDiabetes, setHasDiabetes] = useState<boolean | null>(
+    data.isDiabetic ?? null,
+  );
+  const [hasHighBP, setHasHighBP] = useState<boolean | null>(
+    data.isTreatedHypertension ?? null,
+  );
 
-  const [allergies, setAllergies] = useState<string[]>([]);
-  const [otherAllergy, setOtherAllergy] = useState('');
+  const [allergies, setAllergies] = useState<string[]>(
+    data.allergies?.options || [],
+  );
+  const [otherAllergy, setOtherAllergy] = useState(
+    data.allergies?.details || '',
+  );
 
-  const [hasMedications, setHasMedications] = useState<boolean | null>(null);
-  const [medicationName, setMedicationName] = useState('');
+  const [hasMedications, setHasMedications] = useState<boolean | null>(
+    data.medications?.options?.includes('yes')
+      ? true
+      : data.medications?.options?.includes('no')
+        ? false
+        : null,
+  );
+  const [medicationName, setMedicationName] = useState(
+    data.medications?.details || '',
+  );
   const [showMedicationInfo, setShowMedicationInfo] = useState(false);
 
-  const [limitations, setLimitations] = useState<string[]>([]);
-  const [otherLimitation, setOtherLimitation] = useState('');
+  const [limitations, setLimitations] = useState<string[]>(
+    data.physicalLimitations?.options || [],
+  );
+  const [otherLimitation, setOtherLimitation] = useState(
+    data.physicalLimitations?.details || '',
+  );
   const [showLimitationInfo, setShowLimitationInfo] = useState(false);
 
   const [consents, setConsents] = useState({
@@ -40,37 +64,83 @@ export default function SignUpMedicalHistoryScreen() {
     ai: false,
   });
 
+  // Sync to context when moving away or periodically?
+  // Better to update on next or on change. I'll update on next for bulk data, or simple fields on change.
+  // Actually, keeping Context in sync is safer.
+
+  useEffect(() => {
+    updateData({ isSmoker: isSmoker ?? undefined });
+  }, [isSmoker, updateData]);
+
+  useEffect(() => {
+    updateData({ isDiabetic: hasDiabetes ?? undefined });
+  }, [hasDiabetes, updateData]);
+
+  useEffect(() => {
+    updateData({ isTreatedHypertension: hasHighBP ?? undefined });
+  }, [hasHighBP, updateData]);
+
+  // For complex objects, we update differently
+  const updateAllergies = (newOptions: string[], newDetails: string) => {
+    setAllergies(newOptions);
+    setOtherAllergy(newDetails);
+    updateData({ allergies: { options: newOptions, details: newDetails } });
+  };
+
+  const updateMedications = (hasMeds: boolean | null, details: string) => {
+    setHasMedications(hasMeds);
+    setMedicationName(details);
+    let options: string[] = [];
+    if (hasMeds === true) options = ['yes'];
+    if (hasMeds === false) options = ['no'];
+    updateData({ medications: { options, details } });
+  };
+
+  const updateLimitations = (newOptions: string[], newDetails: string) => {
+    setLimitations(newOptions);
+    setOtherLimitation(newDetails);
+    updateData({
+      physicalLimitations: { options: newOptions, details: newDetails },
+    });
+  };
+
   const toggleAllergy = (item: string) => {
+    let newAllergies = [...allergies];
     if (item === 'none') {
-      setAllergies(['none']);
-      setOtherAllergy('');
+      newAllergies = ['none'];
+      updateAllergies(newAllergies, '');
     } else {
-      let newAllergies = allergies.includes(item)
-        ? allergies.filter((i) => i !== item)
-        : [...allergies, item];
+      if (newAllergies.includes(item)) {
+        newAllergies = newAllergies.filter((i) => i !== item);
+      } else {
+        newAllergies = [...newAllergies, item];
+      }
 
       // Remove 'none' if other items are selected
       if (newAllergies.includes('none')) {
         newAllergies = newAllergies.filter((i) => i !== 'none');
       }
-      setAllergies(newAllergies);
+      updateAllergies(newAllergies, otherAllergy);
     }
   };
 
   const toggleLimitation = (item: string) => {
+    let newLimitations = [...limitations];
     if (item === 'no') {
-      setLimitations(['no']);
-      setOtherLimitation('');
+      newLimitations = ['no'];
+      updateLimitations(newLimitations, '');
     } else {
-      let newLimitations = limitations.includes(item)
-        ? limitations.filter((i) => i !== item)
-        : [...limitations, item];
+      if (newLimitations.includes(item)) {
+        newLimitations = newLimitations.filter((i) => i !== item);
+      } else {
+        newLimitations = [...newLimitations, item];
+      }
 
       // Remove 'no' if other items are selected
       if (newLimitations.includes('no')) {
         newLimitations = newLimitations.filter((i) => i !== 'no');
       }
-      setLimitations(newLimitations);
+      updateLimitations(newLimitations, otherLimitation);
     }
   };
 
@@ -200,7 +270,7 @@ export default function SignUpMedicalHistoryScreen() {
                     className="mt-2 rounded-lg border border-gray-200 p-2 font-qu-semibold text-sm"
                     placeholder="Please specify"
                     value={otherAllergy}
-                    onChangeText={setOtherAllergy}
+                    onChangeText={(text) => updateAllergies(allergies, text)}
                   />
                 )}
               </Section>
@@ -229,21 +299,20 @@ export default function SignUpMedicalHistoryScreen() {
                   label="No"
                   isChecked={hasMedications === false}
                   onPress={() => {
-                    setHasMedications(false);
-                    setMedicationName('');
+                    updateMedications(false, '');
                   }}
                 />
                 <CheckBoxRow
                   label="Yes (optional: medication name)"
                   isChecked={hasMedications === true}
-                  onPress={() => setHasMedications(true)}
+                  onPress={() => updateMedications(true, medicationName)}
                 />
                 <TextInput
                   className="mt-2 rounded-lg border border-gray-200 p-2 font-qu-semibold text-sm"
                   placeholder=""
                   editable={hasMedications === true}
                   value={medicationName}
-                  onChangeText={setMedicationName}
+                  onChangeText={(text) => updateMedications(true, text)}
                   style={{ opacity: hasMedications === true ? 1 : 0.5 }}
                 />
               </Section>
@@ -303,7 +372,9 @@ export default function SignUpMedicalHistoryScreen() {
                     className="mt-2 rounded-lg border border-gray-200 p-2 font-qu-semibold text-sm"
                     placeholder="Please specify"
                     value={otherLimitation}
-                    onChangeText={setOtherLimitation}
+                    onChangeText={(text) =>
+                      updateLimitations(limitations, text)
+                    }
                   />
                 )}
               </Section>

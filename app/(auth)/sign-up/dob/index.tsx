@@ -11,16 +11,21 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/Button';
 import { Progress } from '@/components/ui/progress';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { useSignUp } from '../context';
 
 export default function SignUpDobScreen() {
   const router = useRouter();
+  const { data, updateData } = useSignUp();
   const [showModal, setShowModal] = useState(false);
-  const [date, setDate] = useState<Date>(new Date());
+  const [date, setDate] = useState<Date>(
+    data.dateOfBirth ? new Date(data.dateOfBirth) : new Date(),
+  );
 
   const onChange = (event: any, selectedDate?: Date) => {
     const currentDate = selectedDate || date;
     setShowModal(false);
     setDate(currentDate);
+    updateData({ dateOfBirth: currentDate.toISOString() });
   };
 
   return (
@@ -91,7 +96,7 @@ export default function SignUpDobScreen() {
           <Button
             className="w-full rounded-3xl bg-primary-500 font-qu-semibold text-base text-white"
             onPress={() => {
-              // console.log('Next step with DOB:', date);
+              updateData({ dateOfBirth: date.toISOString() });
               router.push('/sign-up/gender' as any);
             }}
           >

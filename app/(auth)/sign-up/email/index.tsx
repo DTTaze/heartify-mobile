@@ -17,9 +17,11 @@ import { useState, useRef } from 'react';
 import { Button } from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import { authApi } from '@/src/api/auth.api';
+import { useSignUp } from '../context';
 
 export default function SignUpEmailScreen() {
   const router = useRouter();
+  const { updateData } = useSignUp();
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -57,6 +59,9 @@ export default function SignUpEmailScreen() {
       });
 
       if (response.ok && response.data?.success) {
+        // Save credentials for auto-login later
+        updateData({ email, password });
+
         router.push({
           pathname: '/sign-up/verify-email',
           params: { email },

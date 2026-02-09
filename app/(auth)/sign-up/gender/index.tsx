@@ -12,12 +12,20 @@ import { cn } from '@/lib/utils';
 
 import { Button } from '@/components/ui/Button';
 import { Progress } from '@/components/ui/progress';
+import { useSignUp } from '../context';
+import { Gender } from '@/src/types/user';
 
 export default function SignUpGenderScreen() {
   const router = useRouter();
-  const [selectedGender, setSelectedGender] = useState<
-    'male' | 'female' | null
-  >(null);
+  const { data, updateData } = useSignUp();
+  const [selectedGender, setSelectedGender] = useState<Gender | null>(
+    data.gender || null,
+  );
+
+  const handleGenderSelect = (gender: Gender) => {
+    setSelectedGender(gender);
+    updateData({ gender });
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -64,10 +72,10 @@ export default function SignUpGenderScreen() {
 
           <View className="mt-6 flex-row justify-center gap-6 p-6">
             <Pressable
-              onPress={() => setSelectedGender('male')}
+              onPress={() => handleGenderSelect(Gender.MALE)}
               className={cn(
                 'h-32 w-32 items-center justify-center rounded-md border-2 transition-all',
-                selectedGender === 'male'
+                selectedGender === Gender.MALE
                   ? 'border-primary-400 bg-primary-500'
                   : 'border-primary-400 bg-white',
               )}
@@ -76,7 +84,7 @@ export default function SignUpGenderScreen() {
                 <Text
                   className={cn(
                     'mb-2 font-qu-bold text-xl text-neutral-black-500',
-                    selectedGender === 'male'
+                    selectedGender === Gender.MALE
                       ? 'text-white'
                       : 'text-neutral-black-500',
                   )}
@@ -85,17 +93,17 @@ export default function SignUpGenderScreen() {
                 </Text>
                 <MarsIcon
                   size={48}
-                  color={selectedGender === 'male' ? '#EDF4FB' : '#4892D3'}
+                  color={selectedGender === Gender.MALE ? '#EDF4FB' : '#4892D3'}
                   strokeWidth={2.5}
                 />
               </View>
             </Pressable>
 
             <Pressable
-              onPress={() => setSelectedGender('female')}
+              onPress={() => handleGenderSelect(Gender.FEMALE)}
               className={cn(
                 'h-32 w-32 items-center justify-center rounded-md border-2 transition-all',
-                selectedGender === 'female'
+                selectedGender === Gender.FEMALE
                   ? 'border-primary-400 bg-[#EF7979]'
                   : 'border-primary-400 bg-white',
               )}
@@ -104,7 +112,7 @@ export default function SignUpGenderScreen() {
                 <Text
                   className={cn(
                     'mb-2 font-qu-bold text-xl text-neutral-black-500',
-                    selectedGender === 'female'
+                    selectedGender === Gender.FEMALE
                       ? 'text-white'
                       : 'text-neutral-black-500',
                   )}
@@ -113,7 +121,9 @@ export default function SignUpGenderScreen() {
                 </Text>
                 <VenusIcon
                   size={48}
-                  color={selectedGender === 'female' ? '#FFFFFF' : '#EF7979'}
+                  color={
+                    selectedGender === Gender.FEMALE ? '#FFFFFF' : '#EF7979'
+                  }
                   strokeWidth={2.5}
                 />
               </View>

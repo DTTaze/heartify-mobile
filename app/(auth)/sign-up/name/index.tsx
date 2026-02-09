@@ -6,9 +6,11 @@ import { ArrowRight, ChevronLeft } from 'lucide-react-native';
 import { Button } from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import { Progress } from '@/components/ui/progress';
+import { useSignUp } from '../context';
 
 export default function SignUpNameScreen() {
   const router = useRouter();
+  const { data, updateData } = useSignUp();
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -52,6 +54,8 @@ export default function SignUpNameScreen() {
                 label="Last name"
                 placeholder=""
                 inputClassName="rounded-xl border-primary-200"
+                value={data.lastName || ''}
+                onChangeText={(text) => updateData({ lastName: text })}
               />
             </View>
             <View className="flex-1">
@@ -59,6 +63,8 @@ export default function SignUpNameScreen() {
                 label="First name"
                 placeholder=""
                 inputClassName="rounded-xl border-primary-200"
+                value={data.firstName || ''}
+                onChangeText={(text) => updateData({ firstName: text })}
               />
             </View>
           </View>
@@ -68,7 +74,8 @@ export default function SignUpNameScreen() {
         <View className="pb-8">
           <Button
             className="w-full rounded-3xl bg-primary-500"
-            onPress={() => router.push('/sign-up/username')}
+            disabled={!data.firstName || !data.lastName}
+            onPress={() => router.push('/sign-up/dob' as any)}
           >
             <View className="flex-row items-center space-x-2">
               <Text className="mr-2 font-qu-bold text-base text-white">

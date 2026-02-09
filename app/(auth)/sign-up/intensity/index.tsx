@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -20,6 +20,7 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { RunIcon } from '@/assets/icons';
 import { Button } from '@/components/ui/Button';
 import { Progress } from '@/components/ui/progress';
+import { useSignUp } from '../context';
 
 const INTENSITY_LEVELS = [
   {
@@ -68,22 +69,40 @@ const FREQUENCY_OPTIONS = [
 
 export default function IntensityScreen() {
   const router = useRouter();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [intensityLevel, setIntensityLevel] = useState(0); // 0, 1, 2
-  const [frequency, setFrequency] = useState<string | null>(null);
+  const { data, updateData } = useSignUp();
+
+  const [intensityLevel, setIntensityLevel] = useState(
+    data.intensityLevel || 0,
+  ); // 0, 1, 2
+  const [frequency, setFrequency] = useState<string | null>(
+    data.frequencyId || null,
+  );
 
   // Shared values
   const translateX = useSharedValue(0);
   const context = useSharedValue(0);
   const sliderWidthSV = useSharedValue(0);
 
+  useEffect(() => {
+    updateData({ intensityLevel });
+  }, [intensityLevel, updateData]);
+
+  useEffect(() => {
+    if (frequency) updateData({ frequencyId: frequency });
+  }, [frequency, updateData]);
+
   const handleLayout = (event: LayoutChangeEvent) => {
     const width = event.nativeEvent.layout.width;
     sliderWidthSV.value = width;
 
-    // Initialize position based on current level if width changes
     if (width > 0 && translateX.value === 0) {
-      translateX.value = width / 6 - 16;
+      // If no data was present, we default to 0.
+      // If data.intensityLevel was present, we want to start there.
+      // However, translateX.value init is 0.
+      // We should calculate target based on intensityLevel.
+      const segmentWidth = width / 3;
+      const targetX = intensityLevel * segmentWidth + segmentWidth / 2 - 16;
+      translateX.value = targetX;
     }
   };
 
@@ -128,20 +147,17 @@ export default function IntensityScreen() {
     };
   });
 
-  // Animated styles for text labels to show/hide based on position
   const TextStyle = (index: number) =>
     useAnimatedStyle(() => {
       const width = sliderWidthSV.value;
-      if (width <= 0) return { opacity: index === 0 ? 1 : 0 }; // Default to 0 visible
+      if (width <= 0) {
+        return { opacity: index === intensityLevel ? 1 : 0 };
+      }
 
       const segmentWidth = width / 3;
       const currentPos = translateX.value + 16;
       const currentIndex = Math.floor(currentPos / segmentWidth);
 
-      // Smooth opacity transition or just hard switch?
-      // User asked it "chạy theo" (follow). If the text just switches, it's fine.
-      // Let's fade in/out based on distance to center of segment?
-      // Or simpler: strictly based on active segment.
       const isActive =
         currentIndex === index ||
         (currentIndex < 0 && index === 0) ||
@@ -149,7 +165,6 @@ export default function IntensityScreen() {
 
       return {
         opacity: withSpring(isActive ? 1 : 0),
-        // Enhance: maybe scale it too?
         transform: [{ scale: withSpring(isActive ? 1 : 0.8) }],
       };
     });
@@ -213,20 +228,16 @@ export default function IntensityScreen() {
                     ))}
                   </View>
 
-                  {/* Slider Thumb & Moving Description */}
+                  {/* Slider Thumb */}
                   <Animated.View
                     className="absolute left-0 top-1 items-center justify-center p-2"
-                    style={[thumbStyle, { top: 0, width: 40, marginLeft: -4 }]} // width 40 to contain icon? Center point is what matters.
-                    // Actually, translateX drives the whole view.
-                    // Thumb visual center needs to be at translateX + 16 (relative to view).
-                    // If view width is auto, we need to center content.
+                    style={[thumbStyle, { top: 0, width: 40, marginLeft: -4 }]}
                   >
-                    {/* Thumb Icon */}
                     <View className="z-20 h-8 w-8 items-center justify-center rounded-full border border-gray-200 bg-white shadow-sm">
                       <RunIcon width={20} height={20} />
                     </View>
 
-                    {/* Moving Description Bubble */}
+                    {/* Moving Description */}
                     <View className="absolute top-10 w-40 items-center">
                       {INTENSITY_LEVELS.map((level, index) => (
                         <Animated.View

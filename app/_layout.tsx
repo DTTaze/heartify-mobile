@@ -37,12 +37,39 @@ function RootLayoutNav() {
       (segments as string[]).length === 0 ||
       (segments.length === 1 && (segments[0] as string) === 'index');
 
-    if (session && (inAuthGroup || atRoot)) {
-      router.replace('/(tabs)');
-    } else if (!session) {
+    // Define routes within (auth) that are allowed for authenticated users (profile setup)
+    // segments example: ['(auth)', 'sign-up', 'name']
+    const isProfileSetupRoute =
+      segments[0] === '(auth)' &&
+      segments[1] === 'sign-up' &&
+      [
+        'name',
+        'dob',
+        'gender',
+        'measurements',
+        'medical-history',
+        'intensity',
+        'sport',
+      ].includes(segments[2] as string);
+
+    if (session) {
+      // If authenticated
+      if (atRoot) {
+        // Redirect root  to tabs
+        router.replace('/(tabs)');
+      } else if (inAuthGroup && !isProfileSetupRoute) {
+        // If in auth group but NOT in profile setup, redirect to tabs
+        // This covers login, sign-up index, email, verify-email for already logged in users
+        router.replace('/(tabs)');
+      }
+      // If inTabsGroup, do nothing (allow)
+      // If isProfileSetupRoute, do nothing (allow)
+    } else {
+      // If NOT authenticated
       if (inTabsGroup || atRoot) {
         router.replace('/(auth)/sign-up');
       }
+      // If inAuthGroup, allow
     }
   }, [session, segments, isLoading, router]);
 

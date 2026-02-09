@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { View, Text, Pressable, ScrollView } from 'react-native';
+import { useState, useEffect } from 'react';
+import { View, Text, Pressable, ScrollView, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {
@@ -20,6 +20,16 @@ import {
 
 import { Button } from '@/components/ui/Button';
 import { Progress } from '@/components/ui/progress';
+import { useSignUp } from '../context';
+import { userApi } from '@/src/api/user.api';
+import {
+  EXERCISES_FREQUENCY,
+  EXERCISES_GROUP,
+  EXERCISES_INTENSITY,
+  ExerciseRoutine,
+  UserProfileRequest,
+  Gender,
+} from '@/src/types/user';
 
 const GOAL_OPTIONS = [
   {
@@ -73,37 +83,52 @@ const SPORT_OPTIONS = [
     label: 'Cardio',
     description: 'Walking, running, cycling',
     icon: Flame,
+    group: EXERCISES_GROUP.CARDIO,
   },
   {
     id: 'light_recovery',
     label: 'Light / recovery',
     description: 'Yoga, stretching',
     icon: Sparkles,
+    group: EXERCISES_GROUP.LIGHT_RECOVERY,
   },
   {
     id: 'strength_gym',
     label: 'Strength / gym',
     description: '',
     icon: Dumbbell,
+    group: EXERCISES_GROUP.STRENGTH,
   },
   {
     id: 'sports',
     label: 'Sports',
     description: '',
     icon: Trophy,
+    group: EXERCISES_GROUP.SPORTS,
   },
   {
     id: 'mix',
     label: 'Mix',
     description: '',
     icon: Shuffle,
+    group: EXERCISES_GROUP.MIXED,
   },
 ];
 
 export default function SportScreen() {
   const router = useRouter();
-  const [selectedGoals, setSelectedGoals] = useState<string[]>([]);
-  const [selectedSports, setSelectedSports] = useState<string[]>([]);
+  const { data, updateData } = useSignUp();
+  const [selectedGoals, setSelectedGoals] = useState<string[]>(
+    data.selectedGoals || [],
+  );
+  const [selectedSports, setSelectedSports] = useState<string[]>(
+    data.selectedSports || [],
+  );
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    updateData({ selectedGoals, selectedSports });
+  }, [selectedGoals, selectedSports, updateData]);
 
   const toggleGoal = (id: string) => {
     setSelectedGoals((prev) =>
@@ -117,9 +142,90 @@ export default function SportScreen() {
     );
   };
 
-  const handleComplete = () => {
-    // In a real app, save data here
-    router.replace('/(tabs)');
+  const handleComplete = async () => {
+    setIsSubmitting(true);
+    try {
+      // Construct UserProfileRequest
+      const intensityMap: Record<number, EXERCISES_INTENSITY> = {
+        0: EXERCISES_INTENSITY.LOW,
+        1: EXERCISES_INTENSITY.MEDIUM,
+        2: EXERCISES_INTENSITY.HIGH,
+      };
+
+      const frequencyMap: Record<string, EXERCISES_FREQUENCY> = {
+        very_active: EXERCISES_FREQUENCY.VERY_ACTIVE,
+        active: EXERCISES_FREQUENCY.ACTIVE,
+        regular: EXERCISES_FREQUENCY.REGULAR,
+        occasionally: EXERCISES_FREQUENCY.OCCASIONAL,
+      };
+
+      const routines: ExerciseRoutine[] = selectedSports.map((sportId) => {
+        const sport = SPORT_OPTIONS.find((s) => s.id === sportId);
+        return {
+          exercisesGroup: sport ? sport.group : EXERCISES_GROUP.MIXED,
+          frequency: data.frequencyId
+            ? (frequencyMap[data.frequencyId] ?? EXERCISES_FREQUENCY.REGULAR)
+            : EXERCISES_FREQUENCY.REGULAR,
+          intensity:
+            data.intensityLevel !== undefined
+              ? (intensityMap[data.intensityLevel] ?? EXERCISES_INTENSITY.LOW)
+              : EXERCISES_INTENSITY.LOW,
+        };
+      });
+
+      // Calculate BMI (LatestMeasurements)
+      let weight = parseFloat(data.weightVal || '0');
+      let height = parseFloat(data.heightVal || '0');
+
+      let weightKg = weight;
+      if (data.weightUnit === 'lb') weightKg = weight * 0.453592;
+
+      let heightM = height;
+      if (data.heightUnit === 'cm') heightM = height / 100;
+      if (data.heightUnit === 'ft') {
+        heightM = height * 0.3048;
+      }
+
+      const bmi = heightM > 0 ? weightKg / (heightM * heightM) : 0;
+
+      const profileRequest: UserProfileRequest = {
+        firstName: data.firstName || '',
+        lastName: data.lastName || '',
+        isSmoker: data.isSmoker || false,
+        isDiabetic: data.isDiabetic || false,
+        isTreatedHypertension: data.isTreatedHypertension || false,
+        dateOfBirth: data.dateOfBirth || new Date().toISOString(),
+        gender: data.gender || Gender.MALE,
+        country: data.country || 'VN',
+        latestMeasurements: {
+          weight: { value: weight, unit: data.weightUnit || 'kg' },
+          height: { value: height, unit: data.heightUnit || 'cm' },
+          bmi: parseFloat(bmi.toFixed(2)),
+        },
+        allergies: data.allergies || { options: [], details: '' },
+        medications: data.medications || { options: [], details: '' },
+        physicalLimitations: data.physicalLimitations || {
+          options: [],
+          details: '',
+        },
+        goals: selectedGoals,
+        exerciseRoutines: routines,
+      };
+
+      const response = await userApi.updateProfile(profileRequest);
+
+      if (response.ok) {
+        router.replace('/(tabs)');
+      } else {
+        Alert.alert('Error', 'Failed to update profile. Please try again.');
+        console.error('Profile update failed', response.data, response.problem);
+      }
+    } catch (error) {
+      Alert.alert('Error', 'An unexpected error occurred.');
+      console.error(error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -269,11 +375,12 @@ export default function SportScreen() {
               className="w-full rounded-3xl bg-primary-500 shadow-md shadow-blue-200"
               onPress={handleComplete}
               disabled={
-                selectedGoals.length === 0 && selectedSports.length === 0
+                (selectedGoals.length === 0 && selectedSports.length === 0) ||
+                isSubmitting
               }
             >
               <Text className="font-qu-bold text-base text-white">
-                Complete
+                {isSubmitting ? 'Saving...' : 'Complete'}
               </Text>
             </Button>
           </View>

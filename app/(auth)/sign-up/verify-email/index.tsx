@@ -16,6 +16,8 @@ import { useState, useRef } from 'react';
 
 import { Button } from '@/components/ui/Button';
 import { authApi } from '@/src/api/auth.api';
+import { useSignUp } from '../context';
+import { useAuth } from '@/src/context/auth';
 
 export default function SignUpVerifyEmailScreen() {
   const router = useRouter();
@@ -25,6 +27,9 @@ export default function SignUpVerifyEmailScreen() {
   const [isLoading, setIsLoading] = useState(false);
   const [isResending, setIsResending] = useState(false);
   const isSubmittingRef = useRef(false);
+
+  const { data } = useSignUp();
+  const { signIn } = useAuth();
 
   const inputRefs = useRef<(TextInput | null)[]>([]);
 
@@ -68,6 +73,32 @@ export default function SignUpVerifyEmailScreen() {
       });
 
       if (response.ok && response.data?.success) {
+        // Auto-login logic
+        if (data.email && data.password) {
+          try {
+            const loginResponse = await authApi.login({
+              usernameOrEmail: data.email,
+              password: data.password,
+            });
+
+            if (
+              loginResponse.ok &&
+              loginResponse.data &&
+              loginResponse.data.data.accessToken
+            ) {
+              await signIn(loginResponse.data.data.accessToken);
+              // Navigate to the first step of profile setup
+              router.replace('/(auth)/sign-up/name' as any);
+              return;
+            }
+          } catch (loginError) {
+            console.log('Auto-login failed', loginError);
+            // Fallback if auto-login fails, maybe go to login screen or success screen
+            router.replace('/(auth)/log-in');
+          }
+        }
+
+        // If no credentials in context (edge case), go to success or login
         router.push('/sign-up/success');
       } else {
         setIsError(true);
