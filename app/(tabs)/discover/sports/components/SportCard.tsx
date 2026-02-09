@@ -12,6 +12,7 @@ export interface SportCardProps {
   prepTime: string;
   difficult: string;
   calories: string;
+  isRecommended?: boolean;
 }
 
 const SportCard = ({
@@ -21,6 +22,7 @@ const SportCard = ({
   name,
   prepTime,
   difficult,
+  isRecommended,
 }: SportCardProps) => {
   return (
     <View className="rounded-lg border border-sky-200 bg-white p-4 shadow-sm">
@@ -61,15 +63,17 @@ const SportCard = ({
       </View>
 
       <View className="flex-row items-center justify-between">
-        <TouchableOpacity
-          className="flex-row items-center rounded-lg bg-primary-300 px-4 py-2"
-          activeOpacity={0.8}
-        >
-          <Heart color="#fff" size={20} />
-          <Text className="ml-2 font-qu-semibold text-white">
-            Recommend for you!
-          </Text>
-        </TouchableOpacity>
+        {isRecommended && (
+          <TouchableOpacity
+            className="flex-row items-center rounded-lg bg-primary-300 px-4 py-2"
+            activeOpacity={0.8}
+          >
+            <Heart color="#fff" size={20} />
+            <Text className="ml-2 font-qu-semibold text-white">
+              Recommend for you!
+            </Text>
+          </TouchableOpacity>
+        )}
 
         <TouchableOpacity>
           <Icon icon={Bookmark} size={32} />
