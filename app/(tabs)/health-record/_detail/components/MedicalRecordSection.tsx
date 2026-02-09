@@ -9,22 +9,22 @@ import { View } from 'react-native';
 type RecordType = 'GENERAL_CHECKUP' | 'HOME_MEASUREMENT' | 'HOSPITAL_VISIT';
 
 interface MedicalRecordSectionProps {
-  recordNumber: number;
+  recordName: string;
   date: string;
   location: string;
   type: RecordType;
 }
 
 export default function MedicalRecordSection({
-  recordNumber,
+  recordName,
   date,
   location,
   type,
 }: MedicalRecordSectionProps) {
   return (
-    <Section title="">
+    <Section title="GENERAL_CHECKUP">
       <TextCustom className="text-[24px] font-bold text-neutral-black-500">
-        Record #{recordNumber}
+        {recordName}
       </TextCustom>
 
       <View className="mt-1 flex flex-row gap-4">

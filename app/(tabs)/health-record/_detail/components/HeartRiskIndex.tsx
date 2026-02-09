@@ -8,7 +8,7 @@ import { useState } from 'react';
 import { Text, View } from 'react-native';
 
 type Props = {
-  riskPercent?: number;
+  riskScore?: number;
 };
 
 function getRiskLevel(percent: number): RiskLevel {
@@ -34,10 +34,10 @@ function getMarkerLeft(percent: number, barWidth: number) {
   return (clamped / MAX_RISK) * barWidth;
 }
 
-export default function HeartRiskIndex({ riskPercent = 35 }: Props) {
-  const risk = getRiskLevel(riskPercent);
+export default function HeartRiskIndex({ riskScore = 0 }: Props) {
+  const risk = getRiskLevel(riskScore);
   const [barWidth, setBarWidth] = useState(0);
-  const markerLeft = getMarkerLeft(riskPercent, barWidth);
+  const markerLeft = getMarkerLeft(riskScore, barWidth);
 
   return (
     <View className={cn('flex gap-5', 'bg-white')}>
@@ -105,7 +105,7 @@ export default function HeartRiskIndex({ riskPercent = 35 }: Props) {
               'text-neutral-black-500',
             )}
           >
-            {riskPercent.toFixed(2)}%
+            {riskScore.toFixed(2)}%
           </Text>
         </View>
       </View>

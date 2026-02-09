@@ -12,4 +12,7 @@ export const HealthRecordApi = {
     paginate: PaginateRequest,
   ): Promise<ApiResponse<BaseResponse<PaginateResponse<HealthRecord>>>> =>
     api.get('/health-records', paginate),
+
+  getRecord: (id: string): Promise<ApiResponse<BaseResponse<HealthRecord>>> =>
+    api.get(`/health-records/${id}`),
 };
