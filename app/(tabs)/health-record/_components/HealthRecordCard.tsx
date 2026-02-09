@@ -36,7 +36,7 @@ export default function HealthRecordCard({ item }: { item: HealthRecord }) {
 
         <View className="gap-1 px-4 py-2">
           {[
-            `BMI: ${item.bmi}`,
+            `BMI: ${item.measurements?.bmi ?? '--'}`,
             `impact factor: ${Number(item.riskPercentage) * 100}%`,
             `Blood Pressure: ${item.bloodPressure}`,
           ].map((text) => (
@@ -49,7 +49,7 @@ export default function HealthRecordCard({ item }: { item: HealthRecord }) {
 
         <View className="flex flex-row items-center justify-between">
           <Text className="gap-1 text-2">
-            <LocationIcon size={18} /> {item.location}
+            <LocationIcon size={18} /> {item.medicalFacilityName}
           </Text>
           <RiskBadge risk={item.risk} />
         </View>

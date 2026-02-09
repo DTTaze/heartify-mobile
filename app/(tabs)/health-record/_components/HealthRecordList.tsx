@@ -33,11 +33,10 @@ export default function HealthRecordList() {
         const mapped: HealthRecord[] = rows.map((item: any) => ({
           id: item.id,
           healthRecordName: item.healthRecordName,
+          medicalFacilityName: item.medicalFacilityName,
           date: item.recordedAt,
-          bmi: item.measurements?.bmi?.toString() ?? '',
           riskPercentage: item.riskPercentage,
           bloodPressure: `${item.systolicBp}/${item.diastolicBp}`,
-          location: '',
           risk: item.riskLevel,
 
           createdAt: item.createdAt,

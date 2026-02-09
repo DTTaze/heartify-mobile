@@ -3,11 +3,10 @@ export type HealthRiskLevel = 'low' | 'borderline' | 'moderate' | 'high';
 export interface HealthRecord {
   id: string;
   healthRecordName: string;
+  medicalFacilityName: string;
   date: string; // recordedAt
-  bmi: string; // measurements.bmi
   riskPercentage: string;
   bloodPressure: string; // ví dụ: "145/92"
-  location: string;
   risk: HealthRiskLevel;
 
   createdAt: string;
