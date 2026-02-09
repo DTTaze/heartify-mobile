@@ -1,14 +1,14 @@
 import { ScrollView, View } from 'react-native';
 
+import { BubuCheckInCard } from '@/app/(tabs)/health-record/_detail/components/BubuCheckInCard';
 import HeartRiskIndex from '@/app/(tabs)/health-record/_detail/components/HeartRiskIndex';
 import MedicalRecordDetails from '@/app/(tabs)/health-record/_detail/components/MedicalRecordDetails';
 import MedicalRecordSection from '@/app/(tabs)/health-record/_detail/components/MedicalRecordSection';
+import { NoteCard } from '@/app/(tabs)/health-record/_detail/components/NoteCard';
 import ChevronLeftIcon from '@/components/icons/ChevronLeftIcon';
 import EditIcon from '@/components/icons/PenIcon';
 import { Button } from '@/components/ui/Button';
 import { TextCustom } from '@/components/ui/TextCustom';
-import { BubuCheckInCard } from '@/app/(tabs)/health-record/_detail/components/BubuCheckInCard';
-import { NoteCard } from '@/app/(tabs)/health-record/_detail/components/NoteCard';
 
 export default function HeartHealthOverview() {
   return (

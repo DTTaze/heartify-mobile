@@ -1,6 +1,5 @@
 import CameraIcon from '@/components/icons/CameraIcon';
 import PlusIcon from '@/components/icons/PlusIcon';
-import Header from '@/components/ui/Header';
 import * as DocumentPicker from 'expo-document-picker';
 import * as ImagePicker from 'expo-image-picker';
 import { router } from 'expo-router';
@@ -122,112 +121,109 @@ export default function RecordDetails() {
   };
 
   return (
-    <View>
-      <Header />
-      <ScrollView className="gap-5 bg-white px-4 py-2">
-        <View className="gap-5">
-          <View className="gap-1 py-2">
-            <Text className="text-center font-qu-bold text-h1 text-primary-700">
-              Record Details
-            </Text>
+    <ScrollView className="gap-5 bg-white px-4 py-2">
+      <View className="gap-5">
+        <View className="gap-1 py-2">
+          <Text className="text-center font-qu-bold text-h1 text-primary-700">
+            Record Details
+          </Text>
 
-            <Text className="text-center font-qu-semibold text-1 text-neutral-black-400">
-              Complete your health profile by filling in the details from your
-              medical report.
-            </Text>
-          </View>
-
-          <View className="gap-8">
-            <View className="gap-4">
-              <View className="gap-2">
-                <Text className="font-qu-bold text-h3 text-neutral-black-500">
-                  Document Preview
-                </Text>
-
-                <Text className="font-qu-semibold text-2 text-neutral-black-500">
-                  Tap an image to zoom in and read details clearly.
-                </Text>
-              </View>
-
-              <View className="gap-5 rounded-2xl border border-neutral-black-500 p-2">
-                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                  {images.map((img, index) => (
-                    <Image
-                      key={index}
-                      source={{ uri: img.uri }}
-                      className="mr-3 h-40 w-28 gap-2.5 rounded-lg border border-gray-200"
-                    />
-                  ))}
-                </ScrollView>
-
-                <TouchableOpacity
-                  onPress={takePhoto}
-                  className="flex flex-row items-center justify-center gap-1 rounded-2xl bg-neutral-black-150 py-2"
-                >
-                  <CameraIcon />
-                  <Text className="font-qu-semibold text-1 text-white">
-                    Take photo
-                  </Text>
-                </TouchableOpacity>
-
-                <Text className="text-right font-qu-medium text-3 text-xs text-neutral-white-700">
-                  File size limit: 5 MB
-                </Text>
-              </View>
-            </View>
-
-            <View className="gap-4">
-              <View className="gap-2">
-                <Text className="font-qu-bold text-h3 text-neutral-black-500">
-                  Document Preview
-                </Text>
-
-                <Text className="font-qu-semibold text-2 text-neutral-black-500">
-                  Tap an image to zoom in and read details clearly.
-                </Text>
-              </View>
-
-              <View className="gap-5 rounded-2xl border border-neutral-black-500 p-2">
-                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                  {images.map((img, index) => (
-                    <Image
-                      key={index}
-                      source={{ uri: img.uri }}
-                      className="mr-3 h-40 w-28 gap-2.5 rounded-lg border border-gray-200"
-                    />
-                  ))}
-                </ScrollView>
-
-                <TouchableOpacity
-                  onPress={pickFile}
-                  className="flex flex-row items-center justify-center gap-1 rounded-2xl bg-neutral-black-150 py-2"
-                >
-                  <PlusIcon />
-                  <Text className="font-qu-semibold text-1 text-white">
-                    Upload file
-                  </Text>
-                </TouchableOpacity>
-
-                <Text className="text-right font-qu-medium text-3 text-xs text-neutral-white-700">
-                  File size limit: 5 MB
-                </Text>
-              </View>
-            </View>
-          </View>
-
-          <TouchableOpacity
-            disabled={loading}
-            onPress={submit}
-            className={`items-center rounded-full py-3 ${
-              loading ? 'bg-neutral-white-800' : 'bg-primary-500'
-            }`}
-          >
-            <Text className="font-semibold text-white">
-              {loading ? 'Uploading...' : 'Submit'}
-            </Text>
-          </TouchableOpacity>
+          <Text className="text-center font-qu-semibold text-1 text-neutral-black-400">
+            Complete your health profile by filling in the details from your
+            medical report.
+          </Text>
         </View>
-      </ScrollView>
-    </View>
+
+        <View className="gap-8">
+          <View className="gap-4">
+            <View className="gap-2">
+              <Text className="font-qu-bold text-h3 text-neutral-black-500">
+                Document Preview
+              </Text>
+
+              <Text className="font-qu-semibold text-2 text-neutral-black-500">
+                Tap an image to zoom in and read details clearly.
+              </Text>
+            </View>
+
+            <View className="gap-5 rounded-2xl border border-neutral-black-500 p-2">
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                {images.map((img, index) => (
+                  <Image
+                    key={index}
+                    source={{ uri: img.uri }}
+                    className="mr-3 h-40 w-28 gap-2.5 rounded-lg border border-gray-200"
+                  />
+                ))}
+              </ScrollView>
+
+              <TouchableOpacity
+                onPress={takePhoto}
+                className="flex flex-row items-center justify-center gap-1 rounded-2xl bg-neutral-black-150 py-2"
+              >
+                <CameraIcon />
+                <Text className="font-qu-semibold text-1 text-white">
+                  Take photo
+                </Text>
+              </TouchableOpacity>
+
+              <Text className="text-right font-qu-medium text-3 text-xs text-neutral-white-700">
+                File size limit: 5 MB
+              </Text>
+            </View>
+          </View>
+
+          <View className="gap-4">
+            <View className="gap-2">
+              <Text className="font-qu-bold text-h3 text-neutral-black-500">
+                Document Preview
+              </Text>
+
+              <Text className="font-qu-semibold text-2 text-neutral-black-500">
+                Tap an image to zoom in and read details clearly.
+              </Text>
+            </View>
+
+            <View className="gap-5 rounded-2xl border border-neutral-black-500 p-2">
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                {images.map((img, index) => (
+                  <Image
+                    key={index}
+                    source={{ uri: img.uri }}
+                    className="mr-3 h-40 w-28 gap-2.5 rounded-lg border border-gray-200"
+                  />
+                ))}
+              </ScrollView>
+
+              <TouchableOpacity
+                onPress={pickFile}
+                className="flex flex-row items-center justify-center gap-1 rounded-2xl bg-neutral-black-150 py-2"
+              >
+                <PlusIcon />
+                <Text className="font-qu-semibold text-1 text-white">
+                  Upload file
+                </Text>
+              </TouchableOpacity>
+
+              <Text className="text-right font-qu-medium text-3 text-xs text-neutral-white-700">
+                File size limit: 5 MB
+              </Text>
+            </View>
+          </View>
+        </View>
+
+        <TouchableOpacity
+          disabled={loading}
+          onPress={submit}
+          className={`items-center rounded-full py-3 ${
+            loading ? 'bg-neutral-white-800' : 'bg-primary-500'
+          }`}
+        >
+          <Text className="font-semibold text-white">
+            {loading ? 'Uploading...' : 'Submit'}
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
   );
 }
