@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "heartify-mobile",
+    "name": "Heartify",
     "slug": "heartify-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/heartify-app-icon.png",
     "scheme": "heartifymobile",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -24,7 +24,7 @@
     },
     "web": {
       "output": "static",
-      "favicon": "./assets/images/favicon.png",
+      "favicon": "./assets/images/heartify-app-icon.png",
       "bundler": "metro"
     },
     "plugins": [
