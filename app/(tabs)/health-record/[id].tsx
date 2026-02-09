@@ -6,7 +6,7 @@ import MedicalRecordDetails from '@/app/(tabs)/health-record/_detail/components/
 import MedicalRecordSection from '@/app/(tabs)/health-record/_detail/components/MedicalRecordSection';
 import { NoteCard } from '@/app/(tabs)/health-record/_detail/components/NoteCard';
 import ChevronLeftIcon from '@/components/icons/ChevronLeftIcon';
-import EditIcon from '@/components/icons/PenIcon';
+// import EditIcon from '@/components/icons/PenIcon';
 import { Button } from '@/components/ui/Button';
 import { TextCustom } from '@/components/ui/TextCustom';
 import { useRouter, useLocalSearchParams } from 'expo-router';
@@ -69,11 +69,11 @@ export default function HeartHealthOverview() {
             </TextCustom>
           </Button>
 
-          <Button className="flex w-fit flex-row gap-1 rounded-lg bg-neutral-white-400 px-3">
+          {/* <Button className="flex w-fit flex-row gap-1 rounded-lg bg-neutral-white-400 px-3">
             <EditIcon />
 
             <TextCustom className="text-1">Edit Record</TextCustom>
-          </Button>
+          </Button> */}
         </View>
 
         <View className="flex flex-col gap-5">
