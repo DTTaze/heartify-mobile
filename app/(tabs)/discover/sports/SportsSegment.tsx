@@ -36,10 +36,20 @@ const SportsSegment = () => {
   useEffect(() => {
     const fetchExercises = async () => {
       try {
-        const res = await ExercisesApi.getPaginatedExercises();
+        const [exercisesRes, recommendRes] = await Promise.all([
+          ExercisesApi.getPaginatedExercises(),
+          ExercisesApi.recommendExercises(),
+        ]);
 
-        if (res.ok && res.data?.success) {
-          const exercises = res.data.data.rows;
+        let recommendedHashIds: string[] = [];
+        if (recommendRes.ok && recommendRes.data?.success) {
+          recommendedHashIds = recommendRes.data.data.references.map(
+            (ref) => ref.hash_id,
+          );
+        }
+
+        if (exercisesRes.ok && exercisesRes.data?.success) {
+          const exercises = exercisesRes.data.data.rows;
 
           const mapped: SportCardProps[] = exercises.map((item: Exercise) => ({
             id: item.id,
@@ -49,6 +59,7 @@ const SportsSegment = () => {
             prepTime: '5–10 mins',
             difficult: guessDifficulty(item.bodyPart, item.equipment),
             calories: guessCalories(item.bodyPart),
+            isRecommended: recommendedHashIds.includes(item.hash_id),
           }));
 
           setData(mapped);

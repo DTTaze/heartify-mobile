@@ -9,4 +9,20 @@ export interface Exercise {
   target: string;
   secondaryMuscles: string[];
   instructions: string[];
+  hash_id: string;
+}
+
+export interface RecommendedExerciseReference {
+  index: number;
+  name: string;
+  url: string;
+  hash_id: string;
+}
+
+export interface ExerciseRecommendationResponse {
+  final_plan: string;
+  retrieved_exercises: any[];
+  search_query: string;
+  filter_params: any;
+  references: RecommendedExerciseReference[];
 }
