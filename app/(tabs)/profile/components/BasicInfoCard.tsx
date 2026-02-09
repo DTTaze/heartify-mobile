@@ -1,33 +1,38 @@
+import { InfoRow } from '@/app/(tabs)/profile/components/InfoRow';
+import { Text } from '@/components/ui/Text';
+import { UserProfile } from '@/src/types/profile';
 import React from 'react';
 import { View } from 'react-native';
-import { Text } from '@/components/ui/Text';
 
-export const BasicInfoCard = () => {
+interface Props {
+  profile: UserProfile;
+}
+
+export const BasicInfoCard = ({ profile }: Props) => {
+  const age =
+    new Date().getFullYear() - new Date(profile.dateOfBirth).getFullYear();
+
   return (
-    <View className="mx-4 rounded-[16px] border border-gray-200 bg-white p-4 shadow-sm">
-      <View className="space-y-2">
-        <Text className="text-base text-gray-800">
-          <Text className="font-qu-semibold text-gray-900">Age:</Text> 34
-        </Text>
+    <View className="gap-6">
+      <Text className="font-qu-bold text-h1">Basic information</Text>
 
-        <Text className="text-base text-gray-800">
-          <Text className="font-qu-semibold text-gray-900">Gender:</Text> Male
-        </Text>
-
-        <Text className="text-base text-gray-800">
-          <Text className="font-qu-semibold text-gray-900">Location:</Text> San
-          Jose, California, USA
-        </Text>
-
-        <Text className="text-base text-gray-800">
-          <Text className="font-qu-semibold text-gray-900">Height:</Text> 178 cm
-          (5&apos;10&quot;)
-        </Text>
-
-        <Text className="text-base text-gray-800">
-          <Text className="font-qu-semibold text-gray-900">Weight:</Text> 82kg
-          (181 lbs)
-        </Text>
+      <View className="gap-5 rounded-xl border border-neutral-black-150 p-3">
+        <View className="gap-2">
+          <InfoRow label="Age" value={`${age}`} />
+          <InfoRow
+            label="Gender"
+            value={profile.gender === 'male' ? 'Male' : 'Female'}
+          />
+          <InfoRow label="Country" value={profile.country} />
+          <InfoRow
+            label="Height"
+            value={`${profile.latestMeasurements.height.value} ${profile.latestMeasurements.height.unit}`}
+          />
+          <InfoRow
+            label="Weight"
+            value={`${profile.latestMeasurements.weight.value} ${profile.latestMeasurements.weight.unit}`}
+          />
+        </View>
       </View>
     </View>
   );
