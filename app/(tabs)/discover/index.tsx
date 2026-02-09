@@ -1,5 +1,4 @@
 import BookIcon from '@/components/icons/BookIcon';
-// import Button from '@/components/ui/Button';
 import { Button } from '@/components/ui/Button';
 import React, { useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';

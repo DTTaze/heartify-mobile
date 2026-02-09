@@ -24,13 +24,11 @@ const SportCard = ({
 }: SportCardProps) => {
   return (
     <View className="rounded-lg border border-sky-200 bg-white p-4 shadow-sm">
-      {/* Title & Description */}
       <Text className="mb-2 font-qu-bold text-xl text-primary-800">{name}</Text>
       <Text className="mb-4 font-qu-semibold text-sm text-black">
         {description}
       </Text>
 
-      {/* Main Info Row (Image + Details) */}
       <View className="mb-6 flex-row">
         <Image
           source={imageUrl}
@@ -62,7 +60,6 @@ const SportCard = ({
         </View>
       </View>
 
-      {/* Action Row (Recommend & Bookmark) */}
       <View className="flex-row items-center justify-between">
         <TouchableOpacity
           className="flex-row items-center rounded-lg bg-primary-300 px-4 py-2"

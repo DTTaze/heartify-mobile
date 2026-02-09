@@ -1,16 +1,16 @@
-import React, { useMemo, useState, useEffect } from 'react';
-import { FlatList, Pressable, Text, View } from 'react-native';
-import ArrowCircleLeftIcon from '@/components/icons/ArrowCircleLeftIcon';
-import ArrowCircleRightIcon from '@/components/icons/ArrowCircleRightIcon';
-import SortAndFilterBar, { SortType } from './SortAndFilterBar';
-import RiskColorFilter from './RiskColorFilter';
-import HealthRecordCard from './HealthRecordCard';
-import { api } from '@/src/services/api.instance';
 import {
   HealthRecord,
   HealthRiskLevel,
 } from '@/app/(tabs)/health-record/types/health';
+import ArrowCircleLeftIcon from '@/components/icons/ArrowCircleLeftIcon';
+import ArrowCircleRightIcon from '@/components/icons/ArrowCircleRightIcon';
 import { HealthRecordApi } from '@/src/api/healthRecord.api';
+import { api } from '@/src/services/api.instance';
+import React, { useEffect, useMemo, useState } from 'react';
+import { FlatList, Pressable, Text, View } from 'react-native';
+import HealthRecordCard from './HealthRecordCard';
+import RiskColorFilter from './RiskColorFilter';
+import SortAndFilterBar, { SortType } from './SortAndFilterBar';
 const PAGE_SIZE = 50;
 
 export default function HealthRecordList() {

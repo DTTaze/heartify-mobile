@@ -1,88 +1,95 @@
 import { Search } from '@/assets/icons';
+import ArrowCircleLeftIcon from '@/components/icons/ArrowCircleLeftIcon';
+import ArrowCircleRightIcon from '@/components/icons/ArrowCircleRightIcon';
 import { Icon } from '@/components/icons/Icon';
-import React from 'react';
-import { Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ExercisesApi } from '@/src/api/exercises.api';
+import { Exercise } from '@/src/types/exercises';
+import { capitalize, guessCalories, guessDifficulty } from '@/utils/helper';
+import React, { useEffect, useMemo, useState } from 'react';
+import {
+  ActivityIndicator,
+  Pressable,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import SportCard, { SportCardProps } from './components/SportCard';
 
-const categories = [
-  'Fried rice',
-  'Sandwich',
-  'Sandwich',
-  'Tofu',
-  'Grilled chicken',
-  'Nut salad',
-];
+const PAGE_SIZE = 5;
 
-export const FAKE_DATA: SportCardProps[] = [
-  {
-    id: '1',
-    name: 'Morning Running',
-    description:
-      'A light cardio exercise to warm up the body and improve endurance.',
-    imageUrl: require('@/assets/images/mock-workout.png'),
-    prepTime: '10 mins',
-    difficult: 'Easy',
-    calories: '200 kcal',
-  },
-  {
-    id: '2',
-    name: 'Push Ups',
-    description:
-      'Strengthens chest, shoulders, and arms. Can be done anywhere.',
-    imageUrl: require('@/assets/images/mock-workout.png'),
-    prepTime: '5 mins',
-    difficult: 'Medium',
-    calories: '150 kcal',
-  },
-  {
-    id: '3',
-    name: 'Sit Ups',
-    description: 'Focuses on core muscles and helps build abdominal strength.',
-    imageUrl: require('@/assets/images/mock-workout.png'),
-    prepTime: '8 mins',
-    difficult: 'Medium',
-    calories: '180 kcal',
-  },
-  {
-    id: '4',
-    name: 'Plank',
-    description:
-      'A full-body exercise that improves posture and core stability.',
-    imageUrl: require('@/assets/images/mock-workout.png'),
-    prepTime: '4 mins',
-    difficult: 'Hard',
-    calories: '120 kcal',
-  },
-  {
-    id: '5',
-    name: 'Jump Rope',
-    description:
-      'A high-intensity workout that burns calories and improves coordination.',
-    imageUrl: require('@/assets/images/mock-workout.png'),
-    prepTime: '6 mins',
-    difficult: 'Hard',
-    calories: '300 kcal',
-  },
+const categories = [
+  'Push up',
+  'Stretch',
+  'Walk',
+  'Exercise',
+  'Yoga',
+  'Breathing',
+  'Light cardio',
 ];
 
 const SportsSegment = () => {
+  const [data, setData] = useState<SportCardProps[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+
+  useEffect(() => {
+    const fetchExercises = async () => {
+      try {
+        const res = await ExercisesApi.getPaginatedExercises();
+
+        if (res.ok && res.data?.success) {
+          const exercises = res.data.data.rows;
+
+          const mapped: SportCardProps[] = exercises.map((item: Exercise) => ({
+            id: item.id,
+            name: capitalize(item.name),
+            description: item.instructions?.[0] ?? 'No description',
+            imageUrl: { uri: item.gifUrl },
+            prepTime: '5–10 mins',
+            difficult: guessDifficulty(item.bodyPart, item.equipment),
+            calories: guessCalories(item.bodyPart),
+          }));
+
+          setData(mapped);
+        }
+      } catch (e) {
+        console.error('Fetch exercises error', e);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchExercises();
+  }, []);
+
+  useEffect(() => {
+    setPage(1);
+  }, [data]);
+
+  const totalPages = Math.max(1, Math.ceil(data.length / PAGE_SIZE));
+
+  const pageData = useMemo(() => {
+    const start = (page - 1) * PAGE_SIZE;
+    return data.slice(start, start + PAGE_SIZE);
+  }, [data, page]);
+
   return (
     <View>
       <View className="flex-row items-center rounded-full border border-slate-400 p-1">
         <Icon icon={Search} size={24} />
         <TextInput
-          placeholder="Search recipes"
+          placeholder="Search exercises"
           placeholderTextColor="#738197"
           className="ml-3 p-0 font-qu-semibold text-sm text-neutral-black-200"
         />
       </View>
 
       <View className="mt-3 flex-row flex-wrap justify-center gap-2">
-        {categories.map((item, index) => (
+        {categories.map((item) => (
           <TouchableOpacity
-            key={index}
+            key={item}
             className="rounded-full border border-slate-400 px-2 py-1"
-            activeOpacity={0.7}
           >
             <Text className="font-qu-semibold text-sm text-neutral-black-100">
               {item}
@@ -91,28 +98,41 @@ const SportsSegment = () => {
         ))}
       </View>
 
-      {/* <RecipesSelect /> */}
+      <View className="mt-4 flex-row items-center justify-between px-6">
+        <Pressable
+          disabled={page === 1}
+          onPress={() => setPage((p) => Math.max(1, p - 1))}
+        >
+          <ArrowCircleLeftIcon size={24} />
+        </Pressable>
 
-      <View className="mt-3 py-1">
         <Text className="text-center font-qu-bold text-xl text-neutral-black-500">
           Active moves
         </Text>
+
+        <Pressable
+          disabled={page === totalPages}
+          onPress={() => setPage((p) => Math.min(totalPages, p + 1))}
+        >
+          <ArrowCircleRightIcon size={24} />
+        </Pressable>
       </View>
 
-      <View className="mt-4 flex gap-4">
-        {FAKE_DATA.map((item) => (
-          <SportCard
-            key={item.id}
-            id={item.id}
-            name={item.name}
-            description={item.description}
-            imageUrl={item.imageUrl}
-            prepTime={item.prepTime}
-            calories={item.calories}
-            difficult={item.difficult}
-          />
-        ))}
-      </View>
+      {loading ? (
+        <ActivityIndicator className="mt-6" />
+      ) : (
+        <>
+          <View className="mt-4 gap-4">
+            {pageData.map((item) => (
+              <SportCard key={item.id} {...item} />
+            ))}
+          </View>
+        </>
+      )}
+
+      <Text className="font-qu-semibold text-sm text-neutral-black-400">
+        Page {page} / {totalPages}
+      </Text>
     </View>
   );
 };
