@@ -50,3 +50,5 @@ app-example
 
 #expo
 /.idea
+
+.codex/
