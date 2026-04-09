@@ -21,6 +21,8 @@ export const unstable_settings = {
   initialRouteName: 'index',
 };
 
+const SKIP_AUTH_FLOW_FOR_HOME_REVIEW = true;
+
 function RootLayoutNav() {
   const { session, isLoading } = useAuth();
   const segments = useSegments();
@@ -36,6 +38,13 @@ function RootLayoutNav() {
     const atRoot =
       (segments as string[]).length === 0 ||
       (segments.length === 1 && (segments[0] as string) === 'index');
+
+    if (SKIP_AUTH_FLOW_FOR_HOME_REVIEW) {
+      if (atRoot || inAuthGroup) {
+        router.replace('/(tabs)');
+      }
+      return;
+    }
 
     // Define routes within (auth) that are allowed for authenticated users (profile setup)
     // segments example: ['(auth)', 'sign-up', 'name']
